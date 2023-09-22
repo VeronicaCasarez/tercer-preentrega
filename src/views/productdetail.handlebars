@@ -1,0 +1,15 @@
+<div id="product-details" class="container mt-5">
+    {{#each product}}
+  <div class="card">
+    <div class="card-body">
+      <h1 class="card-title">{{name}}</h1>
+      <p class="card-text">{{description}}</p>
+      <p class="card-text">Categoría: {{category}}</p>
+      <p class="card-text">Disponibilidad: {{availability}}</p>
+      <p class="card-text">Precio: {{price}}</p>
+      <button type="button" class="btn btn-secondary add-to-cart-button" id="{{product._id}}" >Agregar al Carrito</button>
+    </div>
+  </div>
+  {{/each}}
+</div>
+<script src="/js/product.js"></script>
