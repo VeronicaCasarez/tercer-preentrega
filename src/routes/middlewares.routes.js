@@ -1,3 +1,7 @@
+import { __dirname } from "../utils.js";
+import { passportCall } from "../utils.js";
+import jwt from "../config/passport.config.js"
+
 // Middleware para verificar si el usuario está logueado
 export function isLoggedIn(req, res, next) {
     if (req.session.user) {
@@ -10,22 +14,32 @@ export function isLoggedIn(req, res, next) {
   }
   
 
-  
+// Middleware de autorización para administradores
+export function isAdmin(req, res, next) {
 
-  // Middleware para verificar si el usuario tiene autorizacion para ir a la ruta privada
-  export function auth(req, res, next) {
-    console.log("sesion",req.session);
-    if (req.session?.user && req.session?.user.admin) {
-       return next();
-    }else return res.status(401).json("error de autenticacion");
+  if (req.session.user && req.session.user.role == 'admin') {
+    next(); // El usuario es administrador, permitir acceso
+  } else {
+    res.status(403).json({ message: 'Acceso no autorizado' });
+  }
 }
 
-// Middleware para verificar roles
-// export function checkRole(req,res,next) {
-     
-//     if (req.session?.user.role === "administrador") {
-//       next(); // Permitir acceso
-//     } else {
-//       res.status(403).send('Acceso denegado'); // Denegar acceso
-//     }
-//   };
+// Middleware de autorización para usuarios
+export function isUser(req, res, next) {
+
+  if (req.session.user && req.session.user.role == 'user') {
+    next(); // El usuario es un usuario regular, permitir acceso
+  } else {
+    res.status(403).json({ message: 'Acceso no autorizado' });
+  }
+}
+
+  // Middleware para verificar si el usuario tiene autorizacion, es admin
+  export function auth(req, res, next) {
+    console.log("sesion",req.user);
+    if (req.user && req.user.role === 'admin')  {
+       return next();
+    }else return res.status(403).json("error de autenticacion");
+}
+
+

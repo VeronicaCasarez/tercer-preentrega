@@ -4,7 +4,7 @@ import { Router } from "express";
 import productsModel from "../dao/models/product.model.js";
 //import Product from '../dao/dbManagers/productManager.js'; 
 
-import { saveCart,getAllCarts,getCartById } from "../controller/cart.controller.js";
+import { saveCart,getAllCarts,getCartById,updateCart } from "../controller/cart.controller.js";
 
 const router = Router();
 //const cartsManager = new Carts();
@@ -14,7 +14,8 @@ const router = Router();
 ////////ENTREGA ARQUITECTURA DE CAPAS:////////////////
 router.get("/",getAllCarts);
 router.post("/",saveCart);
-router.get("/:cid",getCartById)
+router.get("/:cid",getCartById);
+router.post("/:cid/product/:pid", updateCart);
 
 // Mostrar el carrito
 // router.get('/', async (req, res) => {
@@ -69,36 +70,36 @@ router.get("/:cid",getCartById)
   // });
   
 //agregar producto al carrito, si ya existe lo incrementa quantity en 1, sino lo agrega
-  router.post("/:cid/product/:pid", async (req, res) => {
-    try {
-      const cartId = req.params.cid;
-      const productId = req.params.pid;
+  // router.post("/:cid/product/:pid", async (req, res) => {
+  //   try {
+  //     const cartId = req.params.cid;
+  //     const productId = req.params.pid;
   
-      const cartData = await cartsManager.getById(cartId);
-      if (!cartData) {
-        res.status(404).json({ error: "Carrito no encontrado" });
-        return;
-      }
+  //     const cartData = await cartsManager.getById(cartId);
+  //     if (!cartData) {
+  //       res.status(404).json({ error: "Carrito no encontrado" });
+  //       return;
+  //     }
   
-      const existingProduct = await cartsManager.isProductInCart(cartId,productId);
-      if (existingProduct) {
-        // incrementar la cantidad
-        await cartsManager.incrementProductQuantity(cartId, productId);
-      } else {
-        //  agregar el producto con cantidad 1
-        await cartsManager.addProductToCart(cartId, productId);
-      }
+  //     const existingProduct = await cartsManager.isProductInCart(cartId,productId);
+  //     if (existingProduct) {
+  //       // incrementar la cantidad
+  //       await cartsManager.incrementProductQuantity(cartId, productId);
+  //     } else {
+  //       //  agregar el producto con cantidad 1
+  //       await cartsManager.addProductToCart(cartId, productId);
+  //     }
   
-      res.json({
-        message: "Operación realizada correctamente",
-      });
-    } catch (error) {
-      res.status(500).json({
-        message: "Error en la operación",
-        error: error,
-      });
-    }
-  });
+  //     res.json({
+  //       message: "Operación realizada correctamente",
+  //     });
+  //   } catch (error) {
+  //     res.status(500).json({
+  //       message: "Error en la operación",
+  //       error: error,
+  //     });
+  //   }
+  // });
   
   
   //eliminar un producto del carrito

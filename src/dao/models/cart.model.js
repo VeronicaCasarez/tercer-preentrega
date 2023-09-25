@@ -17,6 +17,8 @@ const cartSchema = mongoose.Schema({
     ],
     default: [],
   },
+  total:{
+    type:String}
 });
 
 cartSchema.pre("findById", function () {

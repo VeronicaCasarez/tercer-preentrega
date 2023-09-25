@@ -5,13 +5,14 @@
         <p>{{username}}</p>
         <p> {{user.email}}   </p>
         <p></p>
-         {{#if user.admin}}
-            <p>Rol:&nbsp;Administrador</p>
+         {{#if user.role.admin}}
+            <p>Rol: Administrador</p>
           {{else}}
-              <p>Rol:&nbsp;Usuario</p>
+            <p>Rol: Usuario</p>
         {{/if}}
-        <a  id="logout-button" class="btn btn-secondary m-2 ml-10 ">Cerrar Sesión</a>
-        <a  id="cart-button" class="btn btn-secondary m-2 ml-10 ">Ir al carrito</a>
+        <a  id="logout-button"  class="btn btn-secondary m-2 ml-10 ">Cerrar Sesión</a>
+        <a  id="cart-button" class="btn btn-secondary m-2 ml-10 "  data-cart-id="{{ cart._id }}"> Ir al carrito</a>
+        <a  id="socket-button" class="btn btn-secondary m-2 ml-10 "  href="/chat">Ir al chat</a>
     </div>
    
 
@@ -48,6 +49,7 @@
  
  <script src="/js/product.js"></script>
  <script src="/js/logout.js"></script>
+  <script src="/js/cart.js"></script>
    
 
 

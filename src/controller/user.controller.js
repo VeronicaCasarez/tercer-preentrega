@@ -9,7 +9,8 @@ async function saveUser (req,res){
 
 async function getAllUsers(req,res){
     const users = await USERDAO.getAll();
-    res.send (users)
+    res.send(users)
+    //res.render ('user',{user:users})
 }
 
 export {saveUser,getAllUsers}

@@ -5,7 +5,7 @@ import * as dotenv from "dotenv";
 import ProductModel from "../dao/models/product.model.js";
 import UserModel from "../dao/models/user.model.js"
 import { isLoggedIn } from "./middlewares.routes.js";
-import { saveProduct,getAllProducts,getProductById,deletedProduct } from "../controller/product.controller.js";
+import { saveProduct,getAllProducts,getProductById,deletedProduct,updatedProduct } from "../controller/product.controller.js";
 
 const router = Router();
 
@@ -13,6 +13,7 @@ const router = Router();
 router.get("/",getAllProducts);
 router.post("/",saveProduct);
 router.get("/:pid",getProductById);
+router.post("/:pid",updatedProduct);
 router.delete("/:pid",deletedProduct);
 
 

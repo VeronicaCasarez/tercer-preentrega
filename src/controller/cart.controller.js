@@ -8,13 +8,23 @@ async function saveCart(req,res){
 
 async function getAllCarts(req,res){
     const carts = await CARTDAO.getAll();
-    res.send (carts)
+    res.render ('cart',{carts:carts})
 }
 
 async function getCartById(req,res){
     const cid=req.params.cid;
     const cartId = await CARTDAO.getCartId(cid);
-    res.render ('cart',{carts:cartId})
+    console.log(cartId)
+    res.render ('cartid',{carts:cartId})
 }
 
-export {saveCart,getAllCarts,getCartById}
+async function updateCart(req,res){
+    const cid=req.params.cid;
+    const pid=req.params.pid;
+    const updateCart = await CARTDAO.addProductToCart(cid,pid);
+    console.log(updateCart);
+    res.send(updateCart)
+   
+}
+
+export {saveCart,getAllCarts,getCartById,updateCart}

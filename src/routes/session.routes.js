@@ -1,29 +1,60 @@
 import { Router } from "express";
 import UserModel from "../dao/models/user.model.js";
+import CartModel from "../dao/models/cart.model.js";
 import notifier from 'node-notifier';
 import { passportCall,createHash ,authorization,generateToken, isValidPassword} from "../utils.js";
 import passport from "passport";
 
 
 const router = Router();
-//Login con jwt   
+
+//Login con jwt  
 router.post("/login", async (req, res) => {
-  const { username, password } = req.body
-  const user = await UserModel.findOne({ email: username })
-  console.log("usuario",user)
+  const { username, password } = req.body;
+  const user = await UserModel.findOne({ email: username });
+
   if (!user) {
-      return res.json({ status: "error", message: "User not found" })
+    return res.json({ status: "error", message: "User not found" });
   } else {
-          const myToken = generateToken(user)
-          res
-          .cookie("CoderKeyQueNadieDebeSaber", myToken, {
-              maxAge: 60 * 60 * 1000,
-              httpOnly: true
-          })
-          .json({ status: "success" , respuesta: "Autenticado exitosamente" })
-      }
+    // Crea un carrito vacío para el usuario
+    const cart = [];
+
+    // Crea un nuevo carrito en la base de datos y guarda el ID en el usuario
+    const newCart = await CartModel.create({ products: cart });
+    user.cart = newCart._id; // Asigna el ID del nuevo carrito al usuario
+
+    // Guarda los cambios en el usuario
+    await user.save();
+
+    // Genera el token con información del usuario y el carrito
+    const myToken = generateToken({ user, cart });
+
+    res
+      .cookie("CoderKeyQueNadieDebeSaber", myToken, {
+        maxAge: 60 * 60 * 1000,
+        httpOnly: true,
+      })
+      .json({ status: "success", respuesta: "Autenticado exitosamente" });
   }
-)
+});
+
+// router.post("/login", async (req, res) => {
+//   const { username, password } = req.body
+//   const user = await UserModel.findOne({ email: username })
+//   console.log("usuario",user)
+//   if (!user) {
+//       return res.json({ status: "error", message: "User not found" })
+//   } else {
+//           const myToken = generateToken(user)
+//           res
+//           .cookie("CoderKeyQueNadieDebeSaber", myToken, {
+//               maxAge: 60 * 60 * 1000,
+//               httpOnly: true
+//           })
+//           .json({ status: "success" , respuesta: "Autenticado exitosamente" })
+//       }
+//   }
+// )
 
 
 // router.get("/current", passportCall("jwt"), authorization("user"), (req, res) => {
@@ -71,32 +102,32 @@ router.post("/login", async (req, res) => {
 
 
 //ruta para el login usando passport y faillogin
-router.post(
-  "/login",
-  passport.authenticate("login", {
-    failureRedirect: "/failLogin",
-  }),
-  async (req, res) => {
-    if (!req.user) {
-      return res.status(401).json("error de autenticacion");
-    }
+// router.post(
+//   "/login",
+//   passport.authenticate("login", {
+//     failureRedirect: "/failLogin",
+//   }),
+//   async (req, res) => {
+//     if (!req.user) {
+//       return res.status(401).json("error de autenticacion");
+//     }
     
-    req.session.user = {
-      first_name: req.user.first_name,
-      last_name: req.user.last_name,
-      email: req.user.email,
-      age: req.user.age,
-    };
-    // req.session.admin = true;
-    res.status(200).json({ respuesta: "Autenticado exitosamente" });
-  // res.send({ status: "success", mesage: "user logged", user: req.user });
-  }
-);
+//     req.session.user = {
+//       first_name: req.user.first_name,
+//       last_name: req.user.last_name,
+//       email: req.user.email,
+//       age: req.user.age,
+//     };
+//     // req.session.admin = true;
+//     res.status(200).json({ respuesta: "Autenticado exitosamente" });
+//   // res.send({ status: "success", mesage: "user logged", user: req.user });
+//   }
+// );
 
-router.get("/failLogin", async (req, res) => {
-  console.log("failed strategy");
-  res.send({ error: "failed" });
-});
+// router.get("/failLogin", async (req, res) => {
+//   console.log("failed strategy");
+//   res.send({ error: "failed" });
+// });
 
 
 //ruta del login sin passport

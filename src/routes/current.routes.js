@@ -1,7 +1,6 @@
 import { Router } from "express";
 import { __dirname } from "../utils.js";
 import { passportCall,authorization} from "../utils.js";
-import passport from "passport";
 
 
 
@@ -15,8 +14,9 @@ router.get('/', passportCall('jwt'), (req, res) => {
   }
 
   // Renderiza la vista 'current' y pasa los datos del usuario como contexto
-  //res.render('current', { user: req.user });
- res.json({ user: req.user });
+ // res.render('current', {  user:user });
+    res.json({ user: req.user });
+ 
 });
 
 export default router;

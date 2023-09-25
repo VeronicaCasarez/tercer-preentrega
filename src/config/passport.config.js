@@ -17,7 +17,7 @@ const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
 const GITHUB_CALLBACK_URL = process.env.GITHUB_CALLBACK_URL;
 
 
-const cookieExtractor = (req) => {
+export const cookieExtractor = (req) => {
   let token = null;
   if (req && req.cookies) {
     token = req.cookies["CoderKeyQueNadieDebeSaber"];

@@ -6,19 +6,14 @@ export default class CartDao {
   async getAll() {
     return await cartModel.find({}).lean();
   };
- //obtener un carrito
-  async getOne (id)  {
-    let result = await cartModel.findById(id).lean();
+  
+ //obtener un carrito por id
+  async getCartId(cid)  {
+    let result = await cartModel.findById({_id:cid});
     return result;
   };
   
-  //obtener carrito por id
-  async getCartId(cid) {
-    let cartId = await cartModel.findById(cid)
-    return cartId;
-  };
-
-  //crear carrito
+   //crear carrito
   async save(data) {
     const newCart = await cartModel.create(data);
     return newCart;

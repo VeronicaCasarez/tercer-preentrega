@@ -11,17 +11,29 @@ async function getAllProducts(req,res){
     res.render ('product',{products:products})
 }
 
+async function getAllProductsForAdmin(req,res){
+    const products = await PRODUCTDAO.getAll();
+    res.render ('updateproducts',{products:products})
+}
 async function getProductById(req,res){
     const pid= req.params.pid;
-    const productId = await PRODUCTDAO.getById(pid);
-    res.render ('productdetail',{product:productId})
+    const productById = await PRODUCTDAO.getById(pid);
+    res.render ('productdetail',{product:productById})
 }
 
 
 async function deletedProduct(req,res){
-    const {pid}= req.params;
+    //const {pid}= req.params;
     const productId = await PRODUCTDAO.delete(pid);
     res.send (productId)
 }
 
-export {saveProduct,getAllProducts,getProductById, deletedProduct}
+
+async function updatedProduct(req,res){
+    const pid = req.params;
+    const productToUpdated= req.body;
+    const productUpdated = await PRODUCTDAO.update(pid,productToUpdated);
+    res.send (productUpdated)
+}
+
+export {saveProduct,getAllProducts,getProductById, deletedProduct,updatedProduct,getAllProductsForAdmin}

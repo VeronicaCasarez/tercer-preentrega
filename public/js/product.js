@@ -1,30 +1,3 @@
-
-// document.addEventListener("DOMContentLoaded", async () => {
-//     try {
-//       // Realiza una solicitud a la API para obtener la lista de productos
-//       const response = await fetch("/api/products", {
-//         method: "GET",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-       
-//       });
-  
-//       if (response.ok) {
-//         //const data = await response.json();
-//         const productList = document.getElementById("product-list");
-  
-//         // Itera sobre los productos y crea el HTML correspondiente
-//         const template = Handlebars.compile(document.getElementById("product-template").innerHTML);
-//         productList.innerHTML = template({ products: data });
-//       } else {
-//         console.error("Error al cargar la lista de productos:", response.statusText);
-//       }
-//     } catch (error) {
-//       console.error("Error al cargar la lista de productos:", error);
-//     }
-//   });
-  
 function renderPagination(data) {
     const paginationDiv = document.getElementById('pagination');
     paginationDiv.innerHTML = '';
@@ -42,8 +15,8 @@ function renderPagination(data) {
     }
   }
 
-
-  // Lógica para agregar el producto al carrito****
+  
+  // // Lógica para agregar el producto al carrito****
   document.querySelectorAll('.add-to-cart-button').forEach(button => {
     button.addEventListener('click', addToCart);
   });
@@ -55,6 +28,7 @@ function renderPagination(data) {
     if (!cartId ) {
       return; // Salir de la función si el usuario cancela
     }
+
   
     const pid = event.target.id;
   
@@ -62,15 +36,15 @@ function renderPagination(data) {
       method: 'POST',
     })
     .then(response => response.json())
-    .then(data => {
-      Swal.fire({
-        position: 'top-end',
-        icon: 'success',
-        title: 'Producto agregado correctamente',
-        showConfirmButton: false,
-        timer: 1500
-      });
-    })
+     .then(data => console.log("producto agregado al carrito"))
+      // Swal.fire({
+      //   position: 'top-end',
+      //   icon: 'success',
+      //   title: 'Producto agregado correctamente',
+      //   showConfirmButton: false,
+      //   timer: 1500
+      // });
+    // })
     .catch(error => {
       console.log('Error:', error);
     });

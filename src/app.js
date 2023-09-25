@@ -8,15 +8,21 @@ import LoginRoute from "./routes/login.routes.js";
 import SignupRoute from "./routes/signup.routes.js";
 import SessionRoute from "./routes/session.routes.js";
 import ProductRouter from "./routes/product.routes.js";
+import CartRouter from "./routes/cart.routes.js";
+import UserRouter from "./routes/user.routes.js";
 import LogoutRouter from "./routes/logout.routes.js";
 import CurrentRouter from "./routes/current.routes.js";
 import ForgotRoute from "./routes/forgot.routes.js"
 import FailLogin from "./routes/session.routes.js";
 import FailRegister from "./routes/session.routes.js";
+import ChatRouter from "./routes/chat.routes.js";
+import PrivateRouter from "./routes/private.routes.js";
+import UpdateProductsRouter from "./routes/updateproducts.router.js";
 import passport from "passport";
 import initializePassport from "./config/passport.config.js";
-import CartRouter from "./routes/cart.routes.js";
-import UserRouter from "./routes/user.routes.js";
+import { Server } from "socket.io";
+import { createServer } from "http";
+
 
 
 import * as dotenv from "dotenv";
@@ -25,6 +31,7 @@ import {__dirname} from "./utils.js";
 
 dotenv.config();
 const app = express();
+const httpServer = createServer(app);
 app.use(cookieParser("C0d3rS3cr3t"));
 
 const MONGO_URL = process.env.MONGO_URL;
@@ -84,22 +91,42 @@ app.use("/", LoginRoute);
 app.use("/signup", SignupRoute);
 app.use("/api/session/", SessionRoute);
 app.use("/api/products/",ProductRouter);
+app.use("/private",PrivateRouter);
 app.use("/logout",LogoutRouter);
 app.use("/current",CurrentRouter);
 app.use("/forgot", ForgotRoute);
 app.use("/",FailLogin);
 app.use("/",FailRegister);
-app.use("/",CartRouter);
-
-//ENTREGA ARQUITECTURA POR CAPAS
-app.use("/api/products",ProductRouter)
 app.use("/api/carts/",CartRouter);
-app.use("/user",UserRouter);
+app.use("/api/user",UserRouter);
+app.use("/chat",ChatRouter);
+app.use("/api/updateproducts/",UpdateProductsRouter);
 
-const server = app.listen(PORT, () => {
-  console.log(`Listening on port ${PORT}!`);
+// Configuración del socket (del lado del servidor)
+const socketServer = new Server(httpServer);
+
+// Configurar el evento de conexión de Socket.IO
+socketServer.on("connection", (socket) => {
+  console.log("Nuevo cliente conectado");
+
+  // Manejar eventos personalizados
+  socket.on('mensaje', (data) => {
+    console.log('Mensaje recibido:', data);
+
+    // Enviar una respuesta al cliente
+    socket.emit('respuesta', 'Mensaje recibido correctamente');
+  });
+ 
+   socket.on("disconnect", () => {
+    console.log("Cliente desconectado");
+  });
 });
 
-server.on("error", (err) => {
-  console.error(err);
+
+
+//Iniciar el servidor HTTP
+httpServer.listen(PORT, () => {
+  console.log(`Servidor en ejecución en el puerto: ${PORT}`);
 });
+
+

@@ -12,6 +12,17 @@ const userSchema = new mongoose.Schema({
   role: { type: String, default: 'user' },
 });
   
+// userSchema.pre("findById", function () {
+//   this.populate("carts.product");
+// });
+
+// userSchema.pre("findOne", function () {
+//   this.populate("carts.product");
+// });
+
+// userSchema.pre("find", function () {
+//   this.populate("carts.product");
+// });
 
 const User = mongoose.model(userCollection, userSchema);
 
