@@ -2,12 +2,16 @@ import { Router } from "express";
 import { __dirname } from "../utils.js";
 import { passportCall,authorization} from "../utils.js";
 import {isAdmin} from "./middlewares.routes.js";
+import { getUserById } from "../controller/user.controller.js";
 
 const router =Router()
 
-router.get('/', passportCall('jwt') ,authorization,(req, res) => {
+router.get('/', passportCall('jwt') ,isAdmin,(req, res) => {
+
   const { user } = req;
-  res.json({ message: "usuario autorizado ",user });
+  console.log( "prueba",user.user.user.role);
+ 
+  res.json({ message: "usuario autorizado ", user});
   //res.render('private',{})
     });
 

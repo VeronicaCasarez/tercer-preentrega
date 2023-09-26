@@ -17,7 +17,7 @@ export function isLoggedIn(req, res, next) {
 // Middleware de autorización para administradores
 export function isAdmin(req, res, next) {
 
-  if (req.session.user && req.session.user.role == 'admin') {
+  if (req.user && req.user.user.user.role == 'admin') {
     next(); // El usuario es administrador, permitir acceso
   } else {
     res.status(403).json({ message: 'Acceso no autorizado' });
@@ -27,7 +27,7 @@ export function isAdmin(req, res, next) {
 // Middleware de autorización para usuarios
 export function isUser(req, res, next) {
 
-  if (req.session.user && req.session.user.role == 'user') {
+  if (req.user && req.user.user.user.role == 'user') {
     next(); // El usuario es un usuario regular, permitir acceso
   } else {
     res.status(403).json({ message: 'Acceso no autorizado' });

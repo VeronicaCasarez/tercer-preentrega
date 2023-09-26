@@ -18,12 +18,13 @@ async function getAllProductsForAdmin(req,res){
 async function getProductById(req,res){
     const pid= req.params.pid;
     const productById = await PRODUCTDAO.getById(pid);
-    res.render ('productdetail',{product:productById})
+    console.log("prueba producto",productById)
+    res.render ('productdetail',{products:productById})
 }
 
 
 async function deletedProduct(req,res){
-    //const {pid}= req.params;
+    const {pid}= req.params;
     const productId = await PRODUCTDAO.delete(pid);
     res.send (productId)
 }

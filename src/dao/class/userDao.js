@@ -20,4 +20,11 @@ export default class UserDao {
             console.log(error)
         }
     }
+
+     //obtener un usuario por id
+  async getUserId(uid)  {
+    let result = await userModel.findById({_id:uid});
+    return result;
+  };
+  
 }

@@ -13,4 +13,13 @@ async function getAllUsers(req,res){
     //res.render ('user',{user:users})
 }
 
-export {saveUser,getAllUsers}
+async function getUserById(req,res){
+    const uid=req.params.uid;
+    const userId = await USERDAO.getUserId(uid);
+    console.log(userId);
+    return userId;
+  
+    //res.render ('cartid',{carts:cartId})
+}
+
+export {saveUser,getAllUsers,getUserById}
