@@ -10,7 +10,7 @@ import { saveProduct,getAllProducts,getProductById,deletedProduct,updatedProduct
 const router = Router();
 
 ////////ENTREGA ARQUITECTURA DE CAPAS:////////////////
-router.get("/",getAllProducts);
+router.get("/", getAllProducts);
 router.post("/",saveProduct);
 router.get("/:pid",getProductById);
 router.post("/:pid",updatedProduct);

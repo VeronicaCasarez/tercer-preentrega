@@ -1,14 +1,17 @@
 <div id="product-details" class="container mt-5">
+  {{#if products}}
   <div class="card">
     <div class="card-body">
-      <h1 class="card-title">{{product.name}}</h1>
-      <p class="card-text">{{product.description}}</p>
-      <p class="card-text">Categoría: {{product.category}}</p>
-      <p class="card-text">Disponibilidad: {{product.availability}}</p>
-      <p class="card-text">Precio: {{product.price}}</p>
-      <button type="button" class="btn btn-secondary add-to-cart-button" id="{{product._id}}" >Agregar al Carrito</button>
+       <h1 class="card-title">{{_id}}</h1>
+      <h1 class="card-title">{{name}}</h1>
+      <p class="card-text">{{description}}</p>
+      <p class="card-text">Categoría: {{category}}</p>
+      <p class="card-text">Disponibilidad: {{availability}}</p>
+      <p class="card-text">Precio: {{price}}</p>
+      <button type="button" class="btn btn-secondary add-to-cart-button" id="{{_id}}" >Agregar al Carrito</button>
     </div>
   </div>
+  {{/if}}
 </div>
 
 <script src="/js/product.js"></script>

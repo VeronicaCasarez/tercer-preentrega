@@ -1,5 +1,6 @@
 import { Router } from "express";
-
+import { passportCall} from "../utils.js";
+import {isUser} from "./middlewares.routes.js";
 //import Carts from "../dao/dbManagers/cartManager.js";
 import productsModel from "../dao/models/product.model.js";
 //import Product from '../dao/dbManagers/productManager.js'; 
@@ -12,10 +13,10 @@ const router = Router();
 //const productsManager = new Product();
 
 ////////ENTREGA ARQUITECTURA DE CAPAS:////////////////
-router.get("/",getAllCarts);
-router.post("/",saveCart);
-router.get("/:cid",getCartById);
-router.post("/:cid/product/:pid", updateCart);
+router.get("/",passportCall('jwt') ,isUser,getAllCarts);
+router.post("/",passportCall('jwt') ,isUser,saveCart);
+router.get("/:cid",passportCall('jwt') ,isUser,getCartById);
+router.post("/:cid/product/:pid", passportCall('jwt') ,isUser,updateCart);
 
 // Mostrar el carrito
 // router.get('/', async (req, res) => {

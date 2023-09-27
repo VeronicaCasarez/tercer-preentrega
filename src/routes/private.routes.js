@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { __dirname } from "../utils.js";
-import { passportCall,authorization} from "../utils.js";
+import { passportCall} from "../utils.js";
 import {isAdmin} from "./middlewares.routes.js";
 import { getUserById } from "../controller/user.controller.js";
 
