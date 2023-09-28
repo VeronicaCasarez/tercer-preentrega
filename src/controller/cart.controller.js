@@ -1,4 +1,5 @@
 import { CARTDAO } from "../dao/index.js";
+import { TICKETDAO } from "../dao/index.js";
 
 async function saveCart(req,res){
     const cart= req.body;
@@ -27,13 +28,26 @@ async function updateCart(req,res){
     res.send(updateCart)
    
 }
-//hasta ahora no la use 
-async function purchaseCart(req,res){
-    const cid=req.params.cid;
-    const cartId = await CARTDAO.getCartId(cid);
+
+async function generatedTicket(req,res){
+    const user=req.user;
+    const randomCode = getRandomInt(1000, 9999); 
     
-    res.render ('purchaseCart',{carts:cartId})
+    const newTicket = {
+        code:randomCode,
+        purchase_datetime: new Date(),
+        amount:50,
+        purchaser: user.user.user.email
+    }
+    const ticket = TICKETDAO.newTicket(newTicket)
+    res.json({status: "Success", ticket})
 }
 
 
-export {saveCart,getAllCarts,getCartById,updateCart,purchaseCart}
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+  
+
+
+export {saveCart,getAllCarts,getCartById,updateCart,generatedTicket}

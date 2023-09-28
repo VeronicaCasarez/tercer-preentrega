@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { passportCall} from "../utils.js";
 import {isUser} from "./middlewares.routes.js";
-import { saveCart,getAllCarts,getCartById,updateCart } from "../controller/cart.controller.js";
-import { saveTicket } from "../controller/ticket.controller.js";
+import { saveCart,getAllCarts,getCartById,updateCart,generatedTicket } from "../controller/cart.controller.js";
+//import { saveTicket } from "../controller/ticket.controller.js";
 
 const router = Router();
 //const cartsManager = new Carts();
@@ -13,7 +13,7 @@ router.get("/",passportCall('jwt') ,isUser,getAllCarts);
 router.post("/",passportCall('jwt') ,isUser,saveCart);
 router.get("/:cid",passportCall('jwt') ,isUser,getCartById);
 router.post("/:cid/product/:pid", passportCall('jwt') ,isUser,updateCart);
-router.post("/:cid/purchase/",passportCall('jwt') ,isUser,saveTicket);
+router.post("/:cid/purchase/",passportCall('jwt') ,isUser,generatedTicket);
 
 // Mostrar el carrito
 // router.get('/', async (req, res) => {

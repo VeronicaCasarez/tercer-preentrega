@@ -14,7 +14,7 @@ export default class TicketDao {
   };
  
 
-  async save(data) {
+  async newTicket(data) {
     const newTicket = await ticketModel.create(data);
     return newTicket;
   };

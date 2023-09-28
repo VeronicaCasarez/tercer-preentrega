@@ -18,7 +18,7 @@
     .then(response => {
       if (response.ok) {
         // Redirigir a la compra si es exitosa
-        window.location.href = `/api/carts/${cartId}/purchase/:${puid}`;
+        window.location.href = `/api/carts/${cartId}/purchase/`;
       } else {
         // Manejar errores aquí
         throw new Error('Error al ir a compra');
