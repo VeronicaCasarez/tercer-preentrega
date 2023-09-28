@@ -1,9 +1,10 @@
 <div id="product-details" class="container mt-5">
-  {{#if products}}
+  {{#each products}}
+
   <div class="card">
     <div class="card-body">
-       <h1 class="card-title">{{_id}}</h1>
-      <h1 class="card-title">{{name}}</h1>
+       <h1 class="card-title">{{products._id}}</h1>
+      <h1 class="card-title">{{this.name}}</h1>
       <p class="card-text">{{description}}</p>
       <p class="card-text">Categoría: {{category}}</p>
       <p class="card-text">Disponibilidad: {{availability}}</p>
@@ -11,7 +12,7 @@
       <button type="button" class="btn btn-secondary add-to-cart-button" id="{{_id}}" >Agregar al Carrito</button>
     </div>
   </div>
-  {{/if}}
+  {{/each}}
 </div>
 
 <script src="/js/product.js"></script>

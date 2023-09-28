@@ -1,4 +1,5 @@
-import { PRODUCTDAO } from "../dao/index.js";
+import { PRODUCTDAO, USERDAO } from "../dao/index.js";
+
 
 async function saveProduct (req,res){
     const product= req.body;
@@ -8,12 +9,15 @@ async function saveProduct (req,res){
 
 async function getAllProducts(req,res){
     const products = await PRODUCTDAO.getAll();
-    res.render ('product',{products:products})
+    const user=req.user;
+    const cartId=req.user.user.user.cart;
+    res.render ('product',{products:products,user: user,cartId:cartId})
 }
 
 async function getAllProductsForAdmin(req,res){
     const products = await PRODUCTDAO.getAll();
-    res.render ('updateproducts',{products:products})
+     
+    res.render ('updateproducts',{products:products })
 }
 async function getProductById(req,res){
     const pid= req.params.pid;

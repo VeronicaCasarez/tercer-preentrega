@@ -9,4 +9,5 @@ router.get("/",getAllUsers);
 router.post("/",saveUser);
 //router.get("/:uid",getUserById);
 
+
 export default router;

@@ -33,6 +33,8 @@ cartSchema.pre("find", function () {
   this.populate("products.product");
 });
 
+
+
 const cartModel = mongoose.model(cartsCollection, cartSchema);
 
 export default cartModel;

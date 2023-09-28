@@ -1,22 +1,19 @@
 import { Router } from "express";
 import { passportCall} from "../utils.js";
 import {isUser} from "./middlewares.routes.js";
-//import Carts from "../dao/dbManagers/cartManager.js";
-import productsModel from "../dao/models/product.model.js";
-//import Product from '../dao/dbManagers/productManager.js'; 
-
 import { saveCart,getAllCarts,getCartById,updateCart } from "../controller/cart.controller.js";
+import { saveTicket } from "../controller/ticket.controller.js";
 
 const router = Router();
 //const cartsManager = new Carts();
 
 //const productsManager = new Product();
 
-////////ENTREGA ARQUITECTURA DE CAPAS:////////////////
 router.get("/",passportCall('jwt') ,isUser,getAllCarts);
 router.post("/",passportCall('jwt') ,isUser,saveCart);
 router.get("/:cid",passportCall('jwt') ,isUser,getCartById);
 router.post("/:cid/product/:pid", passportCall('jwt') ,isUser,updateCart);
+router.post("/:cid/purchase/",passportCall('jwt') ,isUser,saveTicket);
 
 // Mostrar el carrito
 // router.get('/', async (req, res) => {

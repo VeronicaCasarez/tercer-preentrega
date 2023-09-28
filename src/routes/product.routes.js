@@ -1,16 +1,18 @@
 import { Router } from "express";
 import mongoose from "mongoose";
 import { __dirname } from "../utils.js";
+import { passportCall } from "../utils.js";
 import * as dotenv from "dotenv";
 import ProductModel from "../dao/models/product.model.js";
 import UserModel from "../dao/models/user.model.js"
 import { isLoggedIn } from "./middlewares.routes.js";
 import { saveProduct,getAllProducts,getProductById,deletedProduct,updatedProduct } from "../controller/product.controller.js";
+import { getUserById } from "../controller/user.controller.js";
 
 const router = Router();
 
 ////////ENTREGA ARQUITECTURA DE CAPAS:////////////////
-router.get("/", getAllProducts);
+router.get("/", passportCall('jwt') ,getAllProducts);
 router.post("/",saveProduct);
 router.get("/:pid",getProductById);
 router.post("/:pid",updatedProduct);

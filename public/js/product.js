@@ -17,7 +17,7 @@ function renderPagination(data) {
 
   
   // // Lógica para agregar el producto al carrito****
-  document.querySelectorAll('.add-to-cart-button').forEach(button => {
+  document.querySelectorAll('.button-add-to-cart').forEach(button => {
     button.addEventListener('click', addToCart);
   });
   
@@ -34,6 +34,10 @@ function renderPagination(data) {
   
     fetch(`/api/carts/${cartId}/product/${pid}`, {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+
     })
     .then(response => response.json())
      .then(data => console.log("producto agregado al carrito"))

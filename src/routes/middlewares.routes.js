@@ -34,6 +34,18 @@ export function isUser(req, res, next) {
   }
 }
 
+export function getUserInSession(req, res, next) {
+  const uid=req.user.user.user._id;
+
+  if (uid) {
+    
+    next(); 
+  } else {
+    res.status(403).json({ message: 'Acceso no autorizado' });
+  }
+}
+
+
   // Middleware para verificar si el usuario tiene autorizacion, es admin
   export function auth(req, res, next) {
     console.log("sesion",req.user);

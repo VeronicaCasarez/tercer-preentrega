@@ -12,6 +12,7 @@ const productSchema = new mongoose.Schema({
    availability: { type: Number, required: true },
 });
 productSchema.plugin(mongoosePaginate);
+
 const productsModel = mongoose.model(productsCollection, productSchema);
 
 export default productsModel;

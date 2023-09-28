@@ -1,30 +1,29 @@
 <div> 
     <div class="welcome-message d-flex align-items-center">
         <p>Bienvenido </p>
-        <p></p>
-        <p>{{username}}</p>
-        <p> {{user.email}}   </p>
-        <p></p>
-         {{#if user.role.admin}}
-            <p>Rol: Administrador</p>
-          {{else}}
-            <p>Rol: Usuario</p>
+        {{#if user}}
+            <p>Usuario: {{user.user.user.email}}</p>
+            <p>Rol: {{user.user.user.role}}</p>
+
+            <button type="button" class="btn btn-secondary cart-button"  id="{{user.user.user.cart}}"> Ir al carrito</button>
+            <a  id="socket-button" class="btn btn-secondary m-2 ml-10 "  href="/chat">Ir al chat</a>
+            <a  id="logout-button"  class="btn btn-secondary m-2 ml-10 ">Cerrar Sesión</a>
         {{/if}}
-        <a  id="logout-button"  class="btn btn-secondary m-2 ml-10 ">Cerrar Sesión</a>
-        <a  id="cart-button" class="btn btn-secondary m-2 ml-10 "  data-cart-id="{{ cart._id }}"> Ir al carrito</a>
-        <a  id="socket-button" class="btn btn-secondary m-2 ml-10 "  href="/chat">Ir al chat</a>
     </div>
    
 
     <div id="product-list" class="d-flex flex-row flex-wrap">
-    {{#each products}}
-      <div class="card m-2 mb-10 p-5">
+    {{#each products }}
+     <div class="card m-2 mb-10 p-5">
         <div class="card-body">
           <h2 class="card-title">{{this.name}}</h2>
           <p class="card-text">Categoría: {{category}}</p>
+          <p class="card-text">Descripcion: {{description}}</p>
           <p class="card-text">Disponibilidad: {{availability}}</p>
           <p class="card-text">Precio: {{price}}</p>
-          <button type="button" class="btn btn-secondary add-to-cart-button" id="{{_id}}">Agregar al Carrito</button>
+      
+          <button type="button" class="btn btn-secondary button-add-to-cart" data-cart-id="{{user.user.user.cart}}" id="{{_id}}">Agregar al Carrito</button>
+        
           <button type="button" class="btn btn-secondary view-details-button" id="{{_id}}">Ver Detalles</button> 
         </div>
       </div>

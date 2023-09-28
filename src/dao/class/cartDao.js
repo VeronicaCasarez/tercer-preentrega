@@ -1,4 +1,6 @@
 import cartModel from "../models/cart.model.js";
+import productsModel from "../models/product.model.js";
+
 
 //comunicacion con la base de datos
 export default class CartDao {

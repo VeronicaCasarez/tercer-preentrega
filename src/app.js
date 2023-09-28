@@ -102,6 +102,7 @@ app.use("/api/user",UserRouter);
 app.use("/chat",ChatRouter);
 app.use("/api/updateproducts/",UpdateProductsRouter);
 
+
 // Configuración del socket (del lado del servidor)
 const socketServer = new Server(httpServer);
 

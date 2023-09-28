@@ -5,7 +5,7 @@ const ticketSchema = new mongoose.Schema({
     code: {
       type: String,
       unique: true,
-      default: shortid.generate, 
+      
       required: true,
     },
     purchase_datetime: {
