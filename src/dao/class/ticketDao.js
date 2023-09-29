@@ -9,11 +9,14 @@ export default class TicketDao {
   }
 
   async getById(tid) {
-      let ticketId= await ticketModel.findById(tid);
+      let ticketId= await ticketModel.findById({_id:tid});
       return ticketId;
   };
  
-
+  async getByEmail(userEmail) {
+    let ticket= await ticketModel.findOne({purchaser:userEmail});
+    return ticket;
+};
   async newTicket(data) {
     const newTicket = await ticketModel.create(data);
     return newTicket;

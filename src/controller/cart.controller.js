@@ -15,7 +15,7 @@ async function getAllCarts(req,res){
 async function getCartById(req,res){
     const cid=req.params.cid;
     const cartId = await CARTDAO.getCartId(cid);
-    console.log("en el controller",cartId)
+    console.log("carrito en el controller",cartId)
     res.render ('cart',{carts:cartId})
     //res.send(cartId)
 }
@@ -31,16 +31,18 @@ async function updateCart(req,res){
 
 async function generatedTicket(req,res){
     const user=req.user;
+    const cid=req.params.cid;
+    const cartId = await CARTDAO.getCartId(cid);
     const randomCode = getRandomInt(1000, 9999); 
     
     const newTicket = {
         code:randomCode,
         purchase_datetime: new Date(),
-        amount:50,
+        amount:cartId.total,
         purchaser: user.user.user.email
     }
     const ticket = TICKETDAO.newTicket(newTicket)
-    res.json({status: "Success", ticket})
+    res.send( ticket)
 }
 
 

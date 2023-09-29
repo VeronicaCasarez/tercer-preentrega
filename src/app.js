@@ -43,7 +43,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 //configuracion de handlebars
-handlebars.create({ allowProtoPropertiesByDefault: true });
+//handlebars.create({ allowProtoPropertiesByDefault: true });
+handlebars.compileOptions = { allowProtoMethodsByDefault: true };
 app.engine("handlebars", handlebars.engine());
 app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");

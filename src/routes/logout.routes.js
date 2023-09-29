@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {  passportCall } from "../utils.js";
 import CartModel from "../dao/models/cart.model.js";
+import cartModel from "../dao/models/cart.model.js";
 
 
 const router = Router();
@@ -9,12 +10,16 @@ const router = Router();
 router.get("", passportCall('jwt'), async (req, res) => {
 
   try {
+    const cartId=req.user.user.user.cart;
+     // Eliminar el carrito de compras
+     await cartModel.findByIdAndDelete(cartId);
     // Destruir la sesión 
     req.session.destroy(err => {
       if (err) {
         console.error("Error al cerrar sesión:", err);
         return res.status(500).json({ respuesta: "Error en el servidor" });
       } else {
+         
         // Limpiar el token y cerrar sesión
         res.clearCookie("CoderKeyQueNadieDebeSaber");
         console.log("sesión cerrada");

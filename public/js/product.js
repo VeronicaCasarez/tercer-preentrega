@@ -24,12 +24,7 @@ function renderPagination(data) {
   function addToCart(event) {
     event.preventDefault();
   
-    let cartId = prompt("Ingrese el id de su carrito");
-    if (!cartId ) {
-      return; // Salir de la función si el usuario cancela
-    }
-
-  
+    const cartId = event.target.getAttribute("data-cart-id");
     const pid = event.target.id;
   
     fetch(`/api/carts/${cartId}/product/${pid}`, {

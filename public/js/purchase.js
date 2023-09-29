@@ -8,7 +8,7 @@
     event.preventDefault();
   
     const cartId = event.target.id;
-   
+    
     fetch(`/api/carts/${cartId}/purchase/`, {
       method: 'POST',
       headers: {
@@ -17,8 +17,9 @@
     })
     .then(response => {
       if (response.ok) {
+        
         // Redirigir a la compra si es exitosa
-        window.location.href = `/api/carts/${cartId}/purchase/`;
+        window.location.href = `/api/carts/${cartId}/finishpurchase/`;
       } else {
         // Manejar errores aquí
         throw new Error('Error al ir a compra');
