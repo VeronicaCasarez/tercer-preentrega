@@ -11,7 +11,11 @@ async function getAllProducts(req,res){
     const products = await PRODUCTDAO.getAll();
     const user=req.user;
     const cartId=req.user.user.user.cart;
-    res.render ('product',{products:products,user: user,cartId:cartId})
+    const userRole = user.user.user.role;
+
+    const showEditButton = userRole === 'admin';
+
+    res.render ('product',{products:products,user: user,cartId:cartId,showEditButton})
 }
 
 async function getAllProductsForAdmin(req,res){

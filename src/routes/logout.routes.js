@@ -1,6 +1,5 @@
 import { Router } from "express";
 import {  passportCall } from "../utils.js";
-import CartModel from "../dao/models/cart.model.js";
 import cartModel from "../dao/models/cart.model.js";
 
 

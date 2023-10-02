@@ -26,7 +26,7 @@ cartSchema.virtual('total').get(function() {
   for (const product of this.products) {
     total += product.quantity * product.product.price;
   }
-  return total.toFixed(2); // Puedes ajustar el formato según tus necesidades
+  return total.toFixed(2); 
 });
 
 // const cartSchema = mongoose.Schema({

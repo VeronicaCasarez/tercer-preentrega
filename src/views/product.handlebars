@@ -4,11 +4,15 @@
         {{#if user}}
             <p>Usuario: {{user.user.user.email}}</p>
             <p>Rol: {{user.user.user.role}}</p>
-
+            
             <button type="button" class="btn btn-secondary cart-button"  id="{{user.user.user.cart}}"> Ir al carrito</button>
             <a  id="socket-button" class="btn btn-secondary m-2 ml-10 "  href="/chat">Ir al chat</a>
             <a  id="logout-button"  class="btn btn-secondary m-2 ml-10 ">Cerrar Sesión</a>
         {{/if}}
+        {{#if showEditButton}}
+            <a type="button" class="btn btn-secondary"   href="/api/updateproducts">Editar productos</a>
+        {{/if}}
+
     </div>
    
 
@@ -49,7 +53,7 @@
  <script src="/js/product.js"></script>
  <script src="/js/logout.js"></script>
   <script src="/js/cart.js"></script>
-   
+   <script src="/js/updateproducts.js"></script>
 
 
 

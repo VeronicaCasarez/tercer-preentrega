@@ -13,9 +13,9 @@
               {{#each products}}
                 <li class="list-group-item">
                   <h5 class="card-subtitle mb-2 text-muted">Id del producto: {{this._id}}</h5>
-                  <p class="card-text">Nombre: {{this.product.name}}</p>
-                  <p class="card-text">Precio: {{this.product.price}}</p>
-                  <p class="card-text">Cantidad: {{this.quantity}}</p>
+                  <p class="card-text">Nombre: {{products.name}}</p>
+                  <p class="card-text">Precio: {{products.price}}</p>
+                  <p class="card-text">Cantidad: {{products.quantity}}</p>
                 </li>
               {{/each}}
             </ul>
