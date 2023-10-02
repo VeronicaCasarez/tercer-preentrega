@@ -12,7 +12,6 @@ async function getAllProducts(req,res){
     const user=req.user;
     const cartId=req.user.user.user.cart;
     const userRole = user.user.user.role;
-
     const showEditButton = userRole === 'admin';
 
     res.render ('product',{products:products,user: user,cartId:cartId,showEditButton})
@@ -20,9 +19,16 @@ async function getAllProducts(req,res){
 
 async function getAllProductsForAdmin(req,res){
     const products = await PRODUCTDAO.getAll();
-     
     res.render ('updateproducts',{products:products })
 }
+
+async function getProductByIdForAdmin(req,res){
+    const pid= req.params.pid;
+    const productById = await PRODUCTDAO.getById(pid);
+    console.log("prueba producto para admin",productById)
+    res.render ('updateoneproduct',{products:productById})
+}
+
 async function getProductById(req,res){
     const pid= req.params.pid;
     const productById = await PRODUCTDAO.getById(pid);
@@ -45,4 +51,4 @@ async function updatedProduct(req,res){
     res.send (productUpdated)
 }
 
-export {saveProduct,getAllProducts,getProductById, deletedProduct,updatedProduct,getAllProductsForAdmin}
+export {saveProduct,getAllProducts,getProductById, deletedProduct,updatedProduct,getAllProductsForAdmin,getProductByIdForAdmin}

@@ -20,7 +20,7 @@ createProductForm.addEventListener('submit', async (event) => {
 
   // Realiza una solicitud POST al servidor para crear el producto
   try {
-    const response = await fetch('/updateproducts', {
+    const response = await fetch('/api/updateproducts', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -30,7 +30,7 @@ createProductForm.addEventListener('submit', async (event) => {
 
     if (response.ok) {
         console.log('Producto creado con éxito');
-        window.location.href = "/updateproducts"; 
+        window.location.href = "/api/updateproducts"; 
        } else {
         console.error('Error al crear el producto:', response.statusText);
     }
@@ -41,8 +41,7 @@ createProductForm.addEventListener('submit', async (event) => {
 
 
 //logica para eliminar un producto
-
-document.querySelectorAll('.deleteProductButton').forEach(button => {
+document.querySelectorAll('.button-delete-product').forEach(button => {
 button.addEventListener('click',  async (event) => {
         const productId = event.target.id;
 
@@ -51,7 +50,8 @@ button.addEventListener('click',  async (event) => {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json'
-                  }
+                  },
+                
                 });
          
 
@@ -68,3 +68,36 @@ button.addEventListener('click',  async (event) => {
         }
     });
 });
+
+
+//logica para actualizar un producto
+document.querySelectorAll('.button-update-product').forEach(button => {
+  button.addEventListener('click',  async (event) => {
+          const productId = event.target.id;
+          comsole.log(productId)
+    
+  
+          try {
+              const response = await fetch(`/api/updateproducts/${productId}`, {
+                  method: 'GET',
+                  headers: {
+                      'Content-Type': 'application/json'
+                    },
+                  
+                  });
+           
+  
+              if (response.ok) {
+                  // El producto se actualizo con éxito
+                  console.log('Producto actualizado con éxito');
+                  location.reload(); // Recarga la página actual
+              } else {
+                  
+                  console.error('Error alactualizar el producto:', response.statusText);
+              }
+          } catch (error) {
+              console.error('Error de red:', error);
+          }
+      });
+  });
+  

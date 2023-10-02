@@ -1,6 +1,6 @@
 <div class= "d-flex flex-row flex-wrap"> 
 <div  class="container mt-0 row " > 
-    <h2>Lista de Productos, solo el Administrador puede estar aca</h2>
+    <h2>Lista de Productos, solo el Administrador puede estar acá</h2>
 </div>
 
 
@@ -25,6 +25,7 @@
         <input type="number" id="availability" name="availability" required><br>
 
         <button type="submit">Crear Producto</button>
+       
     </form>
 </div>
 
@@ -33,6 +34,7 @@
     <ul>
         {{#each products}}
             <li>
+                <strong>Id:</strong> {{this._id}}<br>
                 <strong>Nombre:</strong> {{this.name}}<br>
                 <strong>Descripción:</strong> {{this.description}}<br>
                 <strong>Precio:</strong> {{this.price}}<br>
@@ -40,10 +42,10 @@
                 <strong>Disponibilidad:</strong> {{this.availability}}<br>
 
                 <!-- Botón para actualizar el producto -->
-                <button class="updateProductButton" data-productid="{{this._id}}">Actualizar</button>
+                <button class="button-update-product" id="{{this._id}}"  >Actualizar</button> 
 
                 <!-- Botón para eliminar el producto -->
-                <button class="deleteProductButton" data-productid="{{this._id}}">Eliminar</button>
+                <button class="button-delete-product" id="{{this._id}}">Eliminar</button>
             </li>
         {{/each}}
     </ul>

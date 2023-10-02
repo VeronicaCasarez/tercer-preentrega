@@ -51,6 +51,7 @@ async getByAvailability(filter) {
 
   async update(id, data) {
     const updatedProduct = await productsModel.findByIdAndUpdate(id, data, { new: true });
+    console.log(updatedProduct)
     return updatedProduct;
   };
 
