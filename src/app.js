@@ -18,6 +18,7 @@ import FailRegister from "./routes/session.routes.js";
 import ChatRouter from "./routes/chat.routes.js";
 import PrivateRouter from "./routes/private.routes.js";
 import UpdateProductsRouter from "./routes/updateproducts.router.js";
+import MockingRouter from "./routes/mocking.routes.js"
 import passport from "passport";
 import initializePassport from "./config/passport.config.js";
 import { Server } from "socket.io";
@@ -44,10 +45,11 @@ app.use(express.urlencoded({ extended: true }));
 
 //configuracion de handlebars
 //handlebars.create({ allowProtoPropertiesByDefault: true });
-handlebars.compileOptions = { allowProtoMethodsByDefault: true };
+
 app.engine("handlebars", handlebars.engine());
 app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");
+handlebars.compileOptions = { allowProtoMethodsByDefault: true };
 
 
 
@@ -102,6 +104,7 @@ app.use("/api/carts/",CartRouter);
 app.use("/api/user",UserRouter);
 app.use("/chat",ChatRouter);
 app.use("/api/updateproducts/",UpdateProductsRouter);
+app.use("/mockingproducts",MockingRouter);
 
 
 // Configuración del socket (del lado del servidor)

@@ -44,11 +44,12 @@ async function deletedProduct(req,res){
 }
 
 
-async function updatedProduct(req,res){
+async function updateProduct(req,res){
     const pid = req.params;
     const productToUpdated= req.body;
     const productUpdated = await PRODUCTDAO.update(pid,productToUpdated);
+    console.log(productToUpdated)
     res.send (productUpdated)
 }
 
-export {saveProduct,getAllProducts,getProductById, deletedProduct,updatedProduct,getAllProductsForAdmin,getProductByIdForAdmin}
+export {saveProduct,getAllProducts,getProductById, deletedProduct,updateProduct,getAllProductsForAdmin,getProductByIdForAdmin}

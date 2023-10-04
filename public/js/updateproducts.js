@@ -70,34 +70,78 @@ button.addEventListener('click',  async (event) => {
 });
 
 
-//logica para actualizar un producto
-document.querySelectorAll('.button-update-product').forEach(button => {
-  button.addEventListener('click',  async (event) => {
-          const productId = event.target.id;
-          comsole.log(productId)
-    
-  
-          try {
-              const response = await fetch(`/api/updateproducts/${productId}`, {
-                  method: 'GET',
-                  headers: {
-                      'Content-Type': 'application/json'
-                    },
-                  
-                  });
-           
-  
-              if (response.ok) {
-                  // El producto se actualizo con éxito
-                  console.log('Producto actualizado con éxito');
-                  location.reload(); // Recarga la página actual
-              } else {
-                  
-                  console.error('Error alactualizar el producto:', response.statusText);
-              }
-          } catch (error) {
-              console.error('Error de red:', error);
-          }
-      });
+//logica para ir a actualizar un producto
+document.querySelectorAll('.button-to-update-product').forEach(button => {
+  button.addEventListener('click', moveToUpdateProduct);
+});
+
+function moveToUpdateProduct(event) {
+  event.preventDefault();
+
+  const productId = event.target.id;
+ 
+  fetch(`/api/updateproducts/${productId}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+  .then(response => {
+    if (response.ok) {
+      // Redirigir a actualizar producto si la respuesta es exitosa
+      window.location.href = `/api/updateproducts/${productId}`;
+    } else {
+      // Manejar errores aquí
+      throw new Error('Error al ir a actualizar prodcuto');
+    }
+  })
+  .catch(error => {
+    alert(error.message);
   });
-  
+}
+
+//logica para el boton actualizar producto
+document.addEventListener('DOMContentLoaded', () => {
+  const updateProductForm = document.getElementById('updateProductForm');
+
+  updateProductForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      // Obtiene el ID directamente desde el atributo id del botón
+      const productId = event.target.id;
+
+      const name = document.getElementById('name').value;
+      const description = document.getElementById('description').value;
+      const price = parseFloat(document.getElementById('price').value);
+      const category = document.getElementById('category').value;
+      const availability = parseInt(document.getElementById('availability').value);
+
+      const updateProduct = {
+          name,
+          description,
+          price,
+          category,
+          availability,
+      };
+
+      try {
+          const response = await fetch(`/api/updateproducts/${productId}`, {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(updateProduct),
+          });
+
+          if (response.ok) {
+              console.log('Producto actualizado con éxito');
+              window.location.href = `/api/updateproducts/`;
+          } else {
+              console.error('Error al actualizar el producto:', response.statusText);
+          }
+      } catch (error) {
+          console.error('Error de red:', error);
+      }
+  });
+});
+

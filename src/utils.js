@@ -5,6 +5,7 @@ import passport from "passport";
 import bcrypt from 'bcrypt';
 export const __filename = fileURLToPath(import.meta.url);
 export const __dirname = dirname(__filename);
+import {faker} from '@faker-js/faker';
 
 
 const PRIVATE_KEY = "CoderKeyQueNadieDebeSaber";
@@ -70,3 +71,15 @@ export const isValidPassword = (savedPassword, password) => {
   console.log({ "cloud password": savedPassword, loginPassword: password });
   return bcrypt.compareSync(password, savedPassword);
 };
+
+
+// Función para generar un producto de mocking
+export const generateProductMocks=() =>{
+  return {
+    name: faker.commerce.productName(),
+    description: faker.lorem.sentence(),
+    price: faker.datatype.number({ min: 10, max: 1000, precision: 0.01 }),
+    category: faker.commerce.department(),
+    availability: faker.datatype.number({ min: 0, max: 100 }),
+  };
+}
