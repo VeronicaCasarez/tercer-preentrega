@@ -1,16 +1,13 @@
    <div>
-     {{#each products}}
             <li>
-                <strong>Id:</strong> {{this._id}}<br>
-                <strong>Nombre:</strong> {{this.name}}<br>
-                <strong>Descripción:</strong> {{this.description}}<br>
-                <strong>Precio:</strong> {{this.price}}<br>
-                <strong>Categoría:</strong> {{this.category}}<br>
-                <strong>Disponibilidad:</strong> {{this.availability}}<br>
-             
+                <strong>Id:</strong> {{_id}}<br>
+                <strong>Nombre:</strong> {{name}}<br>
+                <strong>Descripción:</strong> {{description}}<br>
+                <strong>Precio:</strong> {{price}}<br>
+                <strong>Categoría:</strong> {{category}}<br>
+                <strong>Disponibilidad:</strong> {{availability}}<br>
             </li>
-           
-     {{/each}}
+
     <!-- Formulario para actualizar un producto -->
      <form id="updateProductForm" method="POST">
         

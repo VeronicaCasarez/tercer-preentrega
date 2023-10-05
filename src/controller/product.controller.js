@@ -25,15 +25,18 @@ async function getAllProductsForAdmin(req,res){
 async function getProductByIdForAdmin(req,res){
     const pid= req.params.pid;
     const productById = await PRODUCTDAO.getById(pid);
+    productById._id = productById._id.toString(); 
     console.log("prueba producto para admin",productById)
-    res.render ('updateoneproduct',{products:productById})
+    res.render ('updateoneproduct',{productById})
 }
 
 async function getProductById(req,res){
     const pid= req.params.pid;
     const productById = await PRODUCTDAO.getById(pid);
-    console.log("prueba producto",(productById))
-    res.render ('productdetail',{products:productById})
+    productById._id = productById._id.toString(); 
+    res.render('productdetail', productById);
+
+   
 }
 
 

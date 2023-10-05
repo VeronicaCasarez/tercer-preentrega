@@ -16,10 +16,11 @@ async function getAllCarts(req,res){
 
 async function getCartById(req,res){
     const cid=req.params.cid;
-    const cartId = await CARTDAO.getCartId(cid);
-    console.log("carrito en el controller",cartId)
-    res.render ('cart',{carts:cartId})
-    //res.send(cartId)
+    const cartById = await CARTDAO.getCartId(cid);
+    cartById._id = cartById._id.toString(); 
+    console.log("carrito en el controller",cartById)
+    res.render ('cart',cartById)
+        
 }
 
 async function updateCart(req,res){

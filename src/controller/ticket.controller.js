@@ -20,17 +20,17 @@ async function getAllTickets(req,res){
 
 async function getTicketById(req,res){
     const tid=req.params.tid;
-    const purchase = await TICKETDAO.getById(tid);
-    res.send( purchase)
-   // res.render('finishpurchase',{purchase:purchase})
+    const ticket = await TICKETDAO.getById(tid);
+    ticket._id = ticket._id.toString(); 
+    res.render('finishpurchase',ticket)
   
 }
 
 async function getTicketByEmail(req,res){
     const userEmail = req.user.user.user.email;
     const ticket = await TICKETDAO.getByEmail(userEmail);
-    //res.send( ticket)
-    res.render('finishpurchase',{purchase:ticket})
+    ticket._id = ticket._id.toString(); 
+    res.render('finishpurchase',ticket)
   
 }
 export {saveTicket,getAllTickets,getTicketById,getTicketByEmail}

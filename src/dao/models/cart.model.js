@@ -29,29 +29,16 @@ cartSchema.virtual('total').get(function() {
   return total.toFixed(2); 
 });
 
-// const cartSchema = mongoose.Schema({
-//   products: {
-//     type: [
-//       {
-//         product: {
-//           type: mongoose.Schema.Types.ObjectId,
-//           ref: "Products",
-//         },
-//         quantity: {
-//           type: Number,
-//         },
-//       },
-//     ],
-//     default: [],
-//   },
-//   total:{
-//     type:Number,default:0}
-// });
+cartSchema.pre("getCartById", function () {
+  this.populate("products.product");
+});
+cartSchema.pre("getCartId", function () {
+  this.populate("products.product");
+});
 
 cartSchema.pre("findById", function () {
   this.populate("products.product");
 });
-
 cartSchema.pre("findOne", function () {
   this.populate("products.product");
 });
