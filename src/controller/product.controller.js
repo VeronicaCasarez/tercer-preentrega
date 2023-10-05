@@ -1,11 +1,29 @@
 import { PRODUCTDAO, USERDAO } from "../dao/index.js";
+import CustomError from "../services/CustomError.js";
+import EErrors from "../services/enum.js";
+import { generateProductErrorInfo } from "../services/info.js";
 
 
 async function saveProduct (req,res){
-    const product= req.body;
-    await PRODUCTDAO.save(product);
-    res.send(product)
+        try {
+            const product = req.body;
+            if (!product || !product.name || !product.description || !product.price || !product.category || !product.availability) {
+                throw new CustomError(EErrors.InvalidData, "Los datos del producto son inválidos.");
+            }
+    
+            await PRODUCTDAO.save(product);
+            res.send(product);
+        } catch (error) {
+            if (error instanceof CustomError) {
+                const errorInfo = generateProductErrorInfo(error);
+                res.status(errorInfo.statusCode).json(errorInfo);
+            } else {
+                console.error("Error no controlado:", error);
+                res.status(500).json({ message: "Error interno del servidor." });
+            }
+        }
 }
+
 
 async function getAllProducts(req,res){
     const products = await PRODUCTDAO.getAll();
@@ -26,7 +44,7 @@ async function getProductByIdForAdmin(req,res){
     const pid= req.params.pid;
     const productById = await PRODUCTDAO.getById(pid);
     productById._id = productById._id.toString(); 
-    console.log("prueba producto para admin",productById)
+    
     res.render ('updateoneproduct',{productById})
 }
 
