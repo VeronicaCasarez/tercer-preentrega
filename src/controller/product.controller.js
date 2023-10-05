@@ -32,7 +32,7 @@ async function getProductByIdForAdmin(req,res){
 async function getProductById(req,res){
     const pid= req.params.pid;
     const productById = await PRODUCTDAO.getById(pid);
-    console.log("prueba producto",productById)
+    console.log("prueba producto",(productById))
     res.render ('productdetail',{products:productById})
 }
 
@@ -45,7 +45,7 @@ async function deletedProduct(req,res){
 
 
 async function updateProduct(req,res){
-    const pid = req.params;
+    const {pid} = req.params;
     const productToUpdated= req.body;
     const productUpdated = await PRODUCTDAO.update(pid,productToUpdated);
     console.log(productToUpdated)

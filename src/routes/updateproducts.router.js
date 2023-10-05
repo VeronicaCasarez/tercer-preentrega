@@ -10,7 +10,7 @@ router.get("/",passportCall('jwt') ,isAdmin,getAllProductsForAdmin);
 router.post ("/",passportCall('jwt') ,isAdmin,saveProduct);
 router.delete("/:pid",passportCall('jwt') ,isAdmin,deletedProduct);
 router.get ("/:pid",passportCall('jwt') ,isAdmin,getProductByIdForAdmin);
-router.post("/:pid",passportCall('jwt') ,isAdmin,updateProduct);
+router.put("/:pid",passportCall('jwt') ,isAdmin, updateProduct);
 
 
 export default router;
