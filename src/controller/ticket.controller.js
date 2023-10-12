@@ -13,7 +13,7 @@ async function saveTicket (req,res){
 }
 
 async function getAllTickets(req,res){
-    const tickets = awaitTICKETDAO.getAll();
+    const tickets = await TICKETDAO.getAll();
     res.send(tickets)
     //res.render ('user',{user:users})
 }
@@ -21,7 +21,9 @@ async function getAllTickets(req,res){
 async function getTicketById(req,res){
     const tid=req.params.tid;
     const ticket = await TICKETDAO.getById(tid);
+   
     ticket._id = ticket._id.toString(); 
+    
     res.render('finishpurchase',ticket)
   
 }
@@ -30,6 +32,7 @@ async function getTicketByEmail(req,res){
     const userEmail = req.user.user.user.email;
     const ticket = await TICKETDAO.getByEmail(userEmail);
     ticket._id = ticket._id.toString(); 
+    console.log(ticket)
     res.render('finishpurchase',ticket)
   
 }

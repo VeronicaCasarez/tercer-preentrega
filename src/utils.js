@@ -8,6 +8,7 @@ export const __dirname = dirname(__filename);
 import {faker} from '@faker-js/faker';
 
 
+
 const PRIVATE_KEY = "CoderKeyQueNadieDebeSaber";
 
 export const generateToken = (user) => {

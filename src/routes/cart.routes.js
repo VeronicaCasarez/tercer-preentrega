@@ -4,14 +4,15 @@ import {isUser} from "./middlewares.routes.js";
 import { saveCart,getAllCarts,getCartById,updateCart,generatedTicket } from "../controller/cart.controller.js";
 import { getTicketById,getTicketByEmail } from "../controller/ticket.controller.js";
 
+
 const router = Router();
 //const cartsManager = new Carts();
 
 //const productsManager = new Product();
 
-router.get("/",passportCall('jwt') ,isUser,getAllCarts);
+router.get("/",passportCall('jwt'),isUser,getAllCarts);
 
-router.post("/",passportCall('jwt') ,isUser,saveCart);
+router.post("/",passportCall('jwt'),isUser,saveCart);
 
 router.get("/:cid",passportCall('jwt') ,isUser,getCartById);
 

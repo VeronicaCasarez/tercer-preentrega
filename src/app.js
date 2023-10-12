@@ -24,11 +24,11 @@ import initializePassport from "./config/passport.config.js";
 import { Server } from "socket.io";
 import { createServer } from "http";
 
-
-
 import * as dotenv from "dotenv";
 
 import {__dirname} from "./utils.js";
+import { loggerMiddleware } from "./logger.js";
+import LoggerRouter from "./routes/loggertest.routes.js"
 
 dotenv.config();
 const app = express();
@@ -87,7 +87,9 @@ const environment = async () => {
 
 environment();
 
-
+// Ruta para probar los logs
+app.use(loggerMiddleware);
+app.use("/loggertest",LoggerRouter);
 
 //manejo de las rutas
 app.use("/", LoginRoute);
@@ -105,6 +107,10 @@ app.use("/api/user",UserRouter);
 app.use("/chat",ChatRouter);
 app.use("/api/updateproducts/",UpdateProductsRouter);
 app.use("/mockingproducts",MockingRouter);
+
+
+
+
 
 
 // Configuración del socket (del lado del servidor)
