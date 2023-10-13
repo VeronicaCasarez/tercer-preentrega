@@ -1,41 +1,44 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
-const cartsCollection = 'Carts';
-const cartSchema = mongoose.Schema({
-  products: {
-    type: [
-      {
-        product: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Products",
+const cartsCollection = "carts";
+const cartSchema = mongoose.Schema(
+  {
+    products: {
+      type: [
+        {
+          product: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "products",
+          },
+          quantity: {
+            type: Number,
+          },
         },
-        quantity: {
-          type: Number,
-        },
-      },
-    ],
-    default: [],
+      ],
+      default: [],
+    },
   },
-}, {
-  toJSON: { getters: true } // Habilita los getters al convertir a JSON
-});
+  {
+    toJSON: { getters: true }, // Habilita los getters al convertir a JSON
+  }
+);
 
 // Getter para calcular el total automáticamente
-cartSchema.virtual('total').get(function() {
+cartSchema.virtual("total").get(function () {
   let total = 0;
   for (const product of this.products) {
     total += product.quantity * product.product.price;
   }
-  return total.toFixed(2); 
+  return total.toFixed(2);
 });
 
-cartSchema.pre("getCartById", function () {
-  this.populate("products.product");
+/*cartSchema.pre("getCartById", function () {
+  this.populate("Products.product");
 });
 cartSchema.pre("getCartId", function () {
-  this.populate("products.product");
+  this.populate("Products.product");
 });
-
+*/
 cartSchema.pre("findById", function () {
   this.populate("products.product");
 });
@@ -46,8 +49,6 @@ cartSchema.pre("findOne", function () {
 cartSchema.pre("find", function () {
   this.populate("products.product");
 });
-
-
 
 const cartModel = mongoose.model(cartsCollection, cartSchema);
 

@@ -1,72 +1,81 @@
 import { Router } from "express";
-import { passportCall} from "../utils.js";
-import {isUser} from "./middlewares.routes.js";
-import { saveCart,getAllCarts,getCartById,updateCart,generatedTicket } from "../controller/cart.controller.js";
-import { getTicketById,getTicketByEmail } from "../controller/ticket.controller.js";
+import { passportCall } from "../utils.js";
+import { isUser } from "./middlewares.routes.js";
+import {
+  saveCart,
+  getAllCarts,
+  getCartById,
+  updateCart,
+  generatedTicket,
+} from "../controller/cart.controller.js";
+import {
+  getTicketById,
+  getTicketByEmail,
+} from "../controller/ticket.controller.js";
 
-
+import cartModel from "../dao/models/cart.model.js";
 const router = Router();
 //const cartsManager = new Carts();
 
 //const productsManager = new Product();
 
-router.get("/",passportCall('jwt'),isUser,getAllCarts);
+router.get("/", passportCall("jwt"), isUser, getAllCarts);
 
-router.post("/",passportCall('jwt'),isUser,saveCart);
+router.post("/", passportCall("jwt"), isUser, saveCart);
 
-router.get("/:cid",passportCall('jwt') ,isUser,getCartById);
+router.get("/:cid", passportCall("jwt"), isUser, getCartById);
 
+router.post("/:cid/purchase/", passportCall("jwt"), isUser, generatedTicket);
 
+router.get(
+  "/:cid/finishpurchase/",
+  passportCall("jwt"),
+  isUser,
+  getTicketByEmail
+);
 
-router.post("/:cid/purchase/",passportCall('jwt') ,isUser,generatedTicket);
+router.post("/:cid/product/:pid", passportCall("jwt"), isUser, updateCart);
 
-router.get("/:cid/finishpurchase/",passportCall('jwt') ,isUser,getTicketByEmail);
-
-router.post("/:cid/product/:pid", passportCall('jwt') ,isUser,updateCart);
-
-
-  
 //agregar producto al carrito, si ya existe lo incrementa quantity en 1, sino lo agrega
-  // router.post("/:cid/product/:pid", async (req, res) => {
-  //   try {
-  //     const cartId = req.params.cid;
-  //     const productId = req.params.pid;
-  
-  //     const cartData = await cartsManager.getById(cartId);
-  //     if (!cartData) {
-  //       res.status(404).json({ error: "Carrito no encontrado" });
-  //       return;
-  //     }
-  
-  //     const existingProduct = await cartsManager.isProductInCart(cartId,productId);
-  //     if (existingProduct) {
-  //       // incrementar la cantidad
-  //       await cartsManager.incrementProductQuantity(cartId, productId);
-  //     } else {
-  //       //  agregar el producto con cantidad 1
-  //       await cartsManager.addProductToCart(cartId, productId);
-  //     }
-  
-  //     res.json({
-  //       message: "Operación realizada correctamente",
-  //     });
-  //   } catch (error) {
-  //     res.status(500).json({
-  //       message: "Error en la operación",
-  //       error: error,
-  //     });
-  //   }
-  // });
-  
-  
-  //eliminar un producto del carrito
+// router.post("/:cid/product/:pid", async (req, res) => {
+//   try {
+//     const cartId = req.params.cid;
+//     const productId = req.params.pid;
+
+//     const cartData = await cartsManager.getById(cartId);
+//     if (!cartData) {
+//       res.status(404).json({ error: "Carrito no encontrado" });
+//       return;
+//     }
+
+//     const existingProduct = await cartsManager.isProductInCart(cartId,productId);
+//     if (existingProduct) {
+//       // incrementar la cantidad
+//       await cartsManager.incrementProductQuantity(cartId, productId);
+//     } else {
+//       //  agregar el producto con cantidad 1
+//       await cartsManager.addProductToCart(cartId, productId);
+//     }
+
+//     res.json({
+//       message: "Operación realizada correctamente",
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       message: "Error en la operación",
+//       error: error,
+//     });
+//   }
+// });
+
+//eliminar un producto del carrito
 //  router.delete('/:cartId/:productId', (req, res) => {
 //     const cartId = req.params.cartId;
 //     const productId = req.params.productId;
-  
+
 //     try {
 //        const success = cartsManager.removeFromCart(cartId, productId);
-  
+
 //       if (success) {
 //         res.status(200).json({ message: 'Producto eliminado del carrito' });
 //       } else {
@@ -76,12 +85,11 @@ router.post("/:cid/product/:pid", passportCall('jwt') ,isUser,updateCart);
 //       res.status(500).json({ message: 'Error al eliminar un producto del carrito', error: err });
 //     }
 //   });
-  
 
 // //  agregar un arreglo de productos al carrito
 // router.put('/:cid/', async (req, res) => {
 //   const cartId = req.params.cid;
-//   const productsToAdd = req.body.products; 
+//   const productsToAdd = req.body.products;
 //    try {
 //     const cart = await cartsManager.getById(cartId);
 
@@ -96,7 +104,6 @@ router.post("/:cid/product/:pid", passportCall('jwt') ,isUser,updateCart);
 //     res.status(500).json({ message: 'Error al agregar productos al carrito', error: error });
 //   }
 // });
-
 
 // //eliminar todos los productos del carrito
 // router.delete('/:cid/', async (req, res) => {
@@ -138,6 +145,4 @@ router.post("/:cid/product/:pid", passportCall('jwt') ,isUser,updateCart);
 //   }
 // });
 
-
-  
-  export default router;
+export default router;
