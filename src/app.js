@@ -103,7 +103,7 @@ app.use("/forgot", ForgotRoute);
 app.use("/",FailLogin);
 app.use("/",FailRegister);
 app.use("/api/carts/",CartRouter);
-app.use("/api/user",UserRouter);
+app.use("/api/user/",UserRouter);
 app.use("/chat",ChatRouter);
 app.use("/api/updateproducts/",UpdateProductsRouter);
 app.use("/mockingproducts",MockingRouter);

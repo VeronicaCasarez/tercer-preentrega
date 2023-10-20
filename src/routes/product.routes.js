@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { __dirname } from "../utils.js";
 import { passportCall } from "../utils.js";
-import { saveProduct,getAllProducts,getProductById,deletedProduct,updateProduct } from "../controller/product.controller.js";
+import { saveProduct,getAllProducts,getProductById,deleteProduct,updateProduct } from "../controller/product.controller.js";
 
 const router = Router();
 

@@ -1,10 +1,10 @@
 import memoryProductDao from "./memory/product.dao.js";
-import mongoProductDao from "./class/productDao.js";
+import mongoProductDao from "./dbManagers/productDao.js";
 import memoryUserDao from "./memory/user.dao.js";
-import mongoUserDao from "./class/userDao.js";
+import mongoUserDao from "./dbManagers/userDao.js";
 import memoryCartDao from "./memory/cart.dao.js";
-import mongoCartDao from "./class/cartDao.js";
-import mongoTicketDao from "./class/ticketDao.js";
+import mongoCartDao from "./dbManagers/cartDao.js";
+import mongoTicketDao from "./dbManagers/ticketDao.js";
 import memoryTicketDao from "./memory/ticket.dao.js";
 import { PERSISTENCE } from "../config/config.js";
 

@@ -1,7 +1,6 @@
 import ticketModel from '../models/ticket.model.js';
 
 
-//comunicacion con la base de datos
 export default class TicketDao {
   async getAll() {
     let tickets= await ticketModel.find({}).lean();

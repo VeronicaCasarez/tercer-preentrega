@@ -19,8 +19,8 @@ async function getAllCarts(req, res) {
 
 async function getCartById(req, res) {
   const cid = req.params.cid;
-  //const cartById = await CARTDAO.getCartId(cid)
-  const cartById = await cartModel.findById({ _id: cid });
+  const cartById = await CARTDAO.getCartId(cid)
+  //const cartById = await cartModel.findById({ _id: cid });
 
   cartById._id = cartById._id.toString();
   let newCart = {
@@ -33,7 +33,7 @@ async function getCartById(req, res) {
         price: product.product.price,
         category: product.product.category,
         availability: product.product.availability,
-        quantity: product.product.quantity ? 0 : product.product.quantity,
+        quantity:  product.quantity,
       };
     }),
     total: cartById.total,
