@@ -7,13 +7,14 @@ import {
   getCartById,
   updateCart,
   generatedTicket,
+  deleteCart
 } from "../controller/cart.controller.js";
 import {
   getTicketById,
   getTicketByEmail,
 } from "../controller/ticket.controller.js";
 
-import cartModel from "../dao/models/cart.model.js";
+
 const router = Router();
 //const cartsManager = new Carts();
 
@@ -27,14 +28,11 @@ router.get("/:cid", passportCall("jwt"), isUser, getCartById);
 
 router.post("/:cid/purchase/", passportCall("jwt"), isUser, generatedTicket);
 
-router.get(
-  "/:cid/finishpurchase/",
-  passportCall("jwt"),
-  isUser,
-  getTicketByEmail
-);
+router.get("/:cid/finishpurchase/",passportCall("jwt"),isUser,getTicketByEmail);
 
 router.post("/:cid/product/:pid", passportCall("jwt"), isUser, updateCart);
+
+
 
 //agregar producto al carrito, si ya existe lo incrementa quantity en 1, sino lo agrega
 // router.post("/:cid/product/:pid", async (req, res) => {

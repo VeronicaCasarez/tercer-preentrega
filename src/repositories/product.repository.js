@@ -15,6 +15,6 @@ export default class ProductRepository {
       return this.dao.update(pid, product);
     };
     deleteProduct = (pid) => {
-        return this.dao.delete(pid);
-      };
+      return this.dao.delete(pid);
+    };
   }

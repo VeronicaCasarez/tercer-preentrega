@@ -15,40 +15,29 @@ function renderPagination(data) {
     }
   }
 
-  
-  // // Lógica para agregar el producto al carrito****
+     // Lógica para agregar un producto al carrito
   document.querySelectorAll('.button-add-to-cart').forEach(button => {
     button.addEventListener('click', addToCart);
   });
-  
-  function addToCart(event) {
+
+    function addToCart(event) {
     event.preventDefault();
-  
-    const cartId = event.target.getAttribute("data-cart-id");
+    const cid = event.target.getAttribute("data-cart-id"); 
     const pid = event.target.id;
-  
-    fetch(`/api/carts/${cartId}/product/${pid}`, {
+    
+    fetch(`/api/carts/${cid}/product/${pid}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       }
-
     })
     .then(response => response.json())
-     .then(data => console.log("producto agregado al carrito"))
-      // Swal.fire({
-      //   position: 'top-end',
-      //   icon: 'success',
-      //   title: 'Producto agregado correctamente',
-      //   showConfirmButton: false,
-      //   timer: 1500
-      // });
-    // })
+    .then(data => console.log("producto agregado al carrito"))
     .catch(error => {
       console.log('Error:', error);
     });
   }
-   
+  
     
 
    // Lógica para mostrar los detalles del producto

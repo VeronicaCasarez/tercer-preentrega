@@ -1,65 +1,53 @@
 import cartModel from "../models/cart.model.js";
-import productsModel from "../models/product.model.js";
+import mongoose from "mongoose";
 
-//comunicacion con la base de datos
 export default class CartDao {
-  //obtener todos los carritos
-  async getAll() {
-    return await cartModel.find({}).lean();
+  constructor() {
+    console.log(`Working with Database persistence in mongodb`);
   }
-
-  //obtener un carrito por id
-  async getCartId(cid) {
-    console.log("por aca paso");
-    let result = await cartModel.findById({ _id: cid });
-    return result;
-  }
-
-  //crear carrito
-  async save(data) {
+  //CREAR CARRITO**
+  save = async (data) => {
     const newCart = await cartModel.create(data);
     return newCart;
-  }
-
-  //actualizar carrito
-  async update(id, data) {
-    const updatedCart = await cartModel.findByIdAndUpdate(id, {
-      products: data,
-    });
-    return updatedCart;
-  }
-
-  //eliminar carrito
-  async delete(id) {
-    const deletedCart = await cartModel.findByIdAndDelete(id);
-    return deletedCart;
-  }
-
-  //Eliminar del carrito el producto seleccionado***
-  async removeFromCart(cid, pid) {
+  };
+  //OBTENER TODOS LOS CARRITOS
+  getAll = async () => {
+    return await cartModel.find({}).lean();
+  };
+  //OBTENER CARRITO POR ID
+  getById = async (cid) => {
+    let result = await cartModel.findById({ _id: cid });
+    return result;
+  };
+  //AGREGAR UN PRODUCTO AL CARRITO
+  addProduct = async (cid, pid) => {
     try {
       const cart = await cartModel.findOne({ _id: cid });
-      const updatedProducts = cart.products.filter(
-        (p) => String(p.product._id) !== pid
+      const productExists = cart.products.some(
+        (p) => String(p.product) === pid
       );
-      cart.products = updatedProducts;
-      const updatedCart = await cart.save();
 
-      if (!updatedCart) {
-        console.log("Carrito no encontrado");
-        return null;
+      if (!productExists) {
+        const newProduct = { product: pid, quantity: 1 };
+        cart.products.push(newProduct);
+        const updatedCart = await cart.save();
+
+        if (!updatedCart) {
+          console.log("Carrito no encontrado");
+          return null;
+        }
+
+        console.log("Carrito actualizado", updatedCart);
+        return updatedCart;
       }
-
-      console.log("Carrito actualizado", updatedCart);
-      return updatedCart;
     } catch (error) {
-      console.error("Error al eliminar producto del carrito", error);
+      console.error("Error al agregar producto al carrito", error);
       throw error;
     }
-  }
-
-  //buscar un producto en el carrito
-  async isProductInCart(cartId, productId) {
+  };
+  //VERIFICAR SI UN PRODUCTO ESTA EN EL CARRITO
+  isThere = async (cartId, productId) => {
+    console.log("estoy en isThere", cartId, productId);
     try {
       const cart = await cartModel.findOne({ _id: cartId });
       if (cart) {
@@ -67,27 +55,28 @@ export default class CartDao {
           ({ product }) => String(product._id) === productId
         );
         if (productInCart) {
+          console.log("estoy en isThere", productInCart);
           return productInCart;
         } else {
-          return null; // El producto no está en el carrito
+          return null;
         }
       } else {
-        return null; // Carrito no encontrado
+        return null;
       }
     } catch (error) {
       console.error("Error al buscar producto en el carrito:", error);
       throw error;
     }
-  }
-
-  //incrementar quantity, el producto ya existe en el carrito
-  async incrementProductQuantity(cid, pid) {
+  };
+  //INCREMENTAR LA CANTIDAD EN UNO MAS SI EL PRODUCTO ESTA EN EL CARRITO
+  incrementQuantity = async (cid, pid) => {
     try {
       const cart = await cartModel.findOne({ _id: cid });
       const productIndex = cart.products.findIndex(
         (p) => String(p.product._id) === pid
       );
       if (productIndex !== -1) {
+        console.log("estoy en incrementQuantity", productIndex);
         cart.products[productIndex].quantity += 1;
         const updatedCart = await cart.save();
 
@@ -106,37 +95,36 @@ export default class CartDao {
       console.error("Error al incrementar la cantidad del producto", error);
       throw error;
     }
-  }
-
-  // agregar un producto al carrito con cantidad 1**
-  async addProductToCart(cid, pid) {
+  };
+  //ELIMINAR PRODUCTO DEL CARRITO
+  removeProduct = async (cid, pid) => {
     try {
       const cart = await cartModel.findOne({ _id: cid });
-      const productExists = cart.products.some(
-        (p) => String(p.product) === pid
+      const updatedProducts = cart.products.filter(
+        (p) => String(p.product._id) !== pid
       );
-
-      if (!productExists) {
-        const newProduct = { product: pid, quantity: 1 }; // Agregar cantidad inicial
-        cart.products.push(newProduct);
-        const updatedCart = await cart.save();
-
-        if (!updatedCart) {
-          console.log("Carrito no encontrado");
-          return null;
-        }
-        console.log("Carrito actualizado", updatedCart);
-        return updatedCart;
+      cart.products = updatedProducts;
+      const updatedCart = await cart.save();
+      if (!updatedCart) {
+        console.log("Carrito no encontrado");
+        return null;
       }
+      console.log("Carrito actualizado", updatedCart);
+      return updatedCart;
     } catch (error) {
-      console.error("Error al agregar producto al carrito", error);
+      console.error("Error al eliminar producto del carrito", error);
       throw error;
     }
-  }
+  };
 
-  //encontrar un producto en el carrito por id y actualizar la cantidad
-  //en varios
-  async findProductInCartAndUpdateQuantity(cid, pid, newQuantity) {
+  //ELIMINAR CARRITO**
+  delete = async (id) => {
+    const deletedCart = await cartModel.findByIdAndDelete(id);
+    return deletedCart;
+  };
+
+  //BUSCAR UN PRODUCTO EN EL CARRITO Y ACTUALIZAR EN VARIOS
+  findProductInCartAndUpdateQuantity = async (cid, pid, newQuantity) => {
     try {
       const cart = await cartModel.findOne({ _id: cid });
       const productIndex = cart.products.findIndex(
@@ -161,5 +149,5 @@ export default class CartDao {
       console.error("Error al incrementar la cantidad del producto", error);
       throw error;
     }
-  }
+  };
 }

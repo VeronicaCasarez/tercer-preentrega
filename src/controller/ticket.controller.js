@@ -1,39 +1,36 @@
-import { TICKETDAO } from "../dao/index.js";
-import { USERDAO } from "../dao/index.js";
-import { PRODUCTDAO } from "../dao/index.js";
+import { ticketService } from "../repositories/services.js";
 
-//dependiendo si ticket esa en memory o en mongo llamo a class o memory
-async function saveTicket (req,res){
-    const ticket= req.body;
+/////CREAR TICKET///******* */
+const saveTicket = async (req, res) => {
+    const ticket = req.body;
     const user = req.user;
-    await TICKETDAO.save(user);
-    res.json(ticket)
-    //res.render('finishPurchase',{ticket:ticket})
-    
-}
-
-async function getAllTickets(req,res){
-    const tickets = await TICKETDAO.getAll();
-    res.send(tickets)
-    //res.render ('user',{user:users})
-}
-
-async function getTicketById(req,res){
-    const tid=req.params.tid;
-    const ticket = await TICKETDAO.getById(tid);
-   
-    ticket._id = ticket._id.toString(); 
-    
-    res.render('finishpurchase',ticket)
+    await ticketService.createTicket(user);
+    res.json(ticket);
+    // res.render('finishPurchase', { ticket: ticket })
+  };
   
-}
+  /////OBTENER TODOS LOS  TICKETS////NO LA USO
+  const getAllTickets = async (req, res) => {
+    const tickets = await ticketService.getAllTickets();
+    res.send(tickets);
+    // res.render('user', { user: users })
+  };
 
-async function getTicketByEmail(req,res){
+  /////OBTENER  TICKET POR ID ///NO LA USO
+  const getTicketById = async (req, res) => {
+    const tid = req.params.tid;
+    const ticket = await ticketService.getTicketById(tid);
+    ticket._id = ticket._id.toString();
+    res.render('finishpurchase', ticket);
+  };
+  
+  /////OBTENER  TICKET POR EMAIL DE USUARIO //***** */
+  const getTicketByEmail = async (req, res) => {
     const userEmail = req.user.user.user.email;
-    const ticket = await TICKETDAO.getByEmail(userEmail);
-    ticket._id = ticket._id.toString(); 
-    console.log(ticket)
-    res.render('finishpurchase',ticket)
+    const ticket = await ticketService.getTicketByEmail(userEmail);
+    ticket._id = ticket._id.toString();
+    console.log(ticket);
+    res.render('finishpurchase', ticket);
+  };
   
-}
 export {saveTicket,getAllTickets,getTicketById,getTicketByEmail}

@@ -25,9 +25,9 @@
           <p class="card-text">Descripcion: {{description}}</p>
           <p class="card-text">Disponibilidad: {{availability}}</p>
           <p class="card-text">Precio: {{price}}</p>
-   
-          <button type="button" class="btn btn-secondary button-add-to-cart" class="{{user.user.user.cart}}" id="{{_id}}">Agregar al Carrito</button>
-  
+          <div id= "{{user.user.user.cart}}" >  
+          <button type="button" class="btn btn-secondary button-add-to-cart" id="{{_id}}">Agregar al Carrito</button>
+          </div>
           <button type="button" class="btn btn-secondary view-details-button" id="{{_id}}">Ver Detalles</button> 
         </div>
       </div>

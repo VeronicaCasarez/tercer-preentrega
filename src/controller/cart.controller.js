@@ -1,26 +1,27 @@
-import { CARTDAO } from "../dao/index.js";
-import { TICKETDAO } from "../dao/index.js";
-import { PRODUCTDAO } from "../dao/index.js";
 import CustomError from "../services/CustomError.js";
 import EErrors from "../services/enum.js";
 import { updateCartErrorInfo } from "../services/info.js";
-import cartModel from "../dao/models/cart.model.js";
+import { cartService } from "../repositories/services.js";
+import { productService } from "../repositories/services.js";
+import { ticketService } from "../repositories/services.js";
 
-async function saveCart(req, res) {
+//CREAR CARRITO////**** */
+const saveCart = async (req, res) => {
   const cart = req.body;
-  await CARTDAO.save(cart);
+  await cartService.createCart(cart);
   res.send(cart);
-}
+};
 
-async function getAllCarts(req, res) {
-  const carts = await CARTDAO.getAll();
+//OBTENER TODOS LOS CARRITOS///*** NO LA USO */
+const getAllCarts = async (req, res) => {
+  const carts = await cartService.getAllCarts();
   res.render("cart", { carts: carts });
-}
+};
 
-async function getCartById(req, res) {
+//OBTENER EL CARRITO POR ID//**** */
+const getCartById = async (req, res) => {
   const cid = req.params.cid;
-  const cartById = await CARTDAO.getCartId(cid)
-  //const cartById = await cartModel.findById({ _id: cid });
+  const cartById = await cartService.getCartById(cid);
 
   cartById._id = cartById._id.toString();
   let newCart = {
@@ -33,63 +34,42 @@ async function getCartById(req, res) {
         price: product.product.price,
         category: product.product.category,
         availability: product.product.availability,
-        quantity:  product.quantity,
+        quantity: product.quantity,
       };
     }),
     total: cartById.total,
   };
   console.log(newCart);
   res.render("cart", newCart);
-}
+};
 
-// async function updateCart(req,res){
-//     const cid=req.user.user.user.cart;
-//     const pid=req.params.pid;
-//     const updateCart = await CARTDAO.addProductToCart(cid,pid);
-//     console.log(updateCart);
-//     res.send(updateCart)
+//ACTUALIZAR CARRITO ////**** */
+const updateCart = async (req, res) => {
+  const cid = req.user.user.user.cart;
+  const pid = req.params.pid;
 
-// }
-
-//DESAFIO MANEJO DE ERRORRES
-async function updateCart(req, res) {
+  console.log("estoy en el controlador 1", cid, pid);
   try {
-    const cid = req.user.user.user.cart;
-    const pid = req.params.pid;
-    const product = await PRODUCTDAO.getById(pid);
+    const productInCart = await cartService.isProductInCart(cid, pid);
+    console.log("estoy en el controlador 2", productInCart);
 
-    if (
-      !product ||
-      !product.name ||
-      !product.description ||
-      !product.price ||
-      !product.category ||
-      !product.availability
-    ) {
-      throw new CustomError(
-        EErrors.InvalidData,
-        "El producto es inválido o tiene datos faltantes."
-      );
-    }
-
-    const updateCart = await CARTDAO.addProductToCart(cid, pid);
-    console.log(updateCart);
-    res.send(updateCart);
-  } catch (error) {
-    if (error instanceof CustomError) {
-      const errorInfo = updateCartErrorInfo(error);
-      res.status(errorInfo.statusCode).json(errorInfo);
+    if (productInCart) {
+      console.log("estoy en el controlador, soy el product in cart", productInCart);
+      return cartService.incrementProductQuantity(cid, pid);
     } else {
-      console.error("Error no controlado:", error);
-      res.status(500).json({ message: "Error interno del servidor." });
+      return cartService.addProductToCart(cid, pid);
     }
+  } catch (error) {
+    console.error("Error al agregar producto al carrito", error);
+    throw error;
   }
-}
+};
 
-async function generatedTicket(req, res) {
+//GENERAR TICKET///*** */
+const generatedTicket = async (req, res) => {
   const user = req.user;
   const cid = req.params.cid;
-  const cart = await CARTDAO.getCartId(cid);
+  const cart = await cartService.getCartById(cid);
   const randomCode = getRandomInt(1000, 9999);
 
   const newTicket = {
@@ -98,24 +78,22 @@ async function generatedTicket(req, res) {
     amount: cart.total,
     purchaser: user.user.user.email,
   };
-  const ticket = TICKETDAO.newTicket(newTicket);
+  const ticket = ticketService.createTicket(newTicket);
 
   const productsNotPurchased = [];
 
-  // Recorre los productos en el carrito
   for (const item of cart.products) {
     const productId = item.product;
     const quantity = item.quantity;
 
-    // Verifica si hay suficiente disponibilidad
-    const product = await PRODUCTDAO.getById(productId);
+    const product = await productService.getProductById(productId);
 
     if (!product) {
       productsNotPurchased.push({
         productId,
         reason: "Producto no encontrado",
       });
-      continue; // Continuar con el siguiente producto
+      continue;
     }
 
     if (product.availability < quantity) {
@@ -123,21 +101,66 @@ async function generatedTicket(req, res) {
         productId,
         reason: "Disponibilidad insuficiente",
       });
-      continue; // Continuar con el siguiente producto
+      continue;
     }
 
-    // Descuenta la cantidad del producto
     product.availability -= quantity;
-    // Guarda la actualización en la base de datos
     await product.save();
-    // Elimina el producto comprado del carrito
-    await CARTDAO.removeFromCart(cid, product.id);
+    await cartService.removeProductFromCart(cid, product.id);
   }
   res.send(ticket);
-}
+};
 
-function getRandomInt(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+//ELIMINAR CARRITO///*** */
+const deleteCart = async (cartId) => {
+  try {
+    const existingCart = await cartService.getCartById(cartId);
 
-export { saveCart, getAllCarts, getCartById, updateCart, generatedTicket };
+    if (!existingCart) {
+      throw new Error("Carrito no encontrado");
+    }
+    await cartService.deleteCart(cartId);
+  } catch (error) {
+    console.error("Error al eliminar el carrito", error);
+    throw error;
+  }
+};
+
+export { saveCart, getAllCarts, getCartById, updateCart, generatedTicket, deleteCart };
+
+
+//DESAFIO MANEJO DE ERRORRES
+// async function updateCart(req, res) {
+//   try {
+//     const cid = req.user.user.user.cart;
+//     const pid = req.params.pid;
+//     const product = await productService.getProductById(pid);
+
+//     if (
+//       !product ||
+//       !product.name ||
+//       !product.description ||
+//       !product.price ||
+//       !product.category ||
+//       !product.availability
+//     ) {
+//       throw new CustomError(
+//         EErrors.InvalidData,
+//         "El producto es inválido o tiene datos faltantes."
+//       );
+//     }
+
+//     const updateCart = await cartService.addProductToCart(cid, pid);
+//     console.log(updateCart);
+//     res.send(updateCart);
+//   } catch (error) {
+//     // if (error instanceof CustomError) {
+//     //   const errorInfo = updateCartErrorInfo(error);
+//     //   res.status(errorInfo.statusCode).json(errorInfo);
+//     // } else {
+//       console.error("Error no controlado:", error);
+//       res.status(500).json({ message: "Error interno del servidor." });
+//     // }
+//   }
+// }
+

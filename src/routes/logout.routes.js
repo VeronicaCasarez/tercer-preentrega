@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {  passportCall } from "../utils.js";
 import cartModel from "../dao/models/cart.model.js";
+import { deleteCart } from "../controller/cart.controller.js";
 
 
 const router = Router();
@@ -10,8 +11,9 @@ router.get("", passportCall('jwt'), async (req, res) => {
 
   try {
     const cartId=req.user.user.user.cart;
+    console.log("estoy en el logout", cartId)
      // Eliminar el carrito de compras
-     await cartModel.findByIdAndDelete(cartId);
+     await deleteCart(cartId); 
     // Destruir la sesión 
     req.session.destroy(err => {
       if (err) {

@@ -50,7 +50,7 @@ const saveUser = async (req, res) => {
 
 //OBTENER TODOS LOS USUARIOS/////**** */
 const getAllUsers = async (req, res) => {
-    let users = await userService.getAll();
+    let users = await userService.getAllUsers();
     if (!users)
       return res
         .status(500)
@@ -65,7 +65,7 @@ const getAllUsers = async (req, res) => {
  //OBTENER USUARIO POR ID///////*** */
 const getUserById = async(req,res)=>{
     const uid=req.params.uid;
-    const userId = await userService.getUserId(uid);
+    const userId = await userService.getUserById(uid);
     res.send (userId)
 }
 

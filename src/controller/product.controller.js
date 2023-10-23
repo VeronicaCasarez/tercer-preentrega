@@ -3,7 +3,7 @@ import EErrors from "../services/enum.js";
 import { generateProductErrorInfo } from "../services/info.js";
 import { productService } from "../repositories/services.js";
 
-////GUARDAR PRODUCTO////*** */
+////CREAR PRODUCTO////*** */
 const saveProduct = async (req, res) => {
     try {
       const product = req.body;

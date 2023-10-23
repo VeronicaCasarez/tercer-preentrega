@@ -6,27 +6,23 @@ export default class ProductDao {
   constructor() {
     console.log(`Working users with Database persistence in mongodb`)
 }
-  getAll = async () => {
-    let products = await productsModel.find({}).lean();
-    return products;
-  };
-
-  getById = async (pid) => {
-    let productId = await productsModel.findById(pid);
-    return productId;
-  };
-
   save = async (product) => {
     const newProduct = await productsModel.create(product);
     return newProduct;
   };
-
+  getAll = async () => {
+    let products = await productsModel.find({}).lean();
+    return products;
+  };
+  getById = async (pid) => {
+    let productId = await productsModel.findById(pid);
+    return productId;
+  };
   update = async (pid, product) => {
     const updatedProduct = await productsModel.findByIdAndUpdate(pid, product, { new: true });
     console.log(updatedProduct);
     return updatedProduct;
   };
-
   delete = async (pid) => {
     const deletedProduct = await productsModel.findByIdAndDelete(pid);
     return deletedProduct;
