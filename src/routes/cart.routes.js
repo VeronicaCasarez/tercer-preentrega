@@ -20,17 +20,17 @@ const router = Router();
 
 //const productsManager = new Product();
 
-router.get("/", passportCall("jwt"), isUser, getAllCarts);
+router.get("/", passportCall("jwt"),  getAllCarts);
 
-router.post("/", passportCall("jwt"), isUser, saveCart);
+router.post("/", passportCall("jwt"),  saveCart);
 
-router.get("/:cid", passportCall("jwt"), isUser, getCartById);
+router.get("/:cid", passportCall("jwt"),  getCartById);
 
-router.post("/:cid/purchase/", passportCall("jwt"), isUser, generatedTicket);
+router.post("/:cid/purchase/", passportCall("jwt"),  generatedTicket);
 
-router.get("/:cid/finishpurchase/",passportCall("jwt"),isUser,getTicketByEmail);
+router.get("/:cid/finishpurchase/",passportCall("jwt"),getTicketByEmail);
 
-router.post("/:cid/product/:pid", passportCall("jwt"), isUser, updateCart);
+router.post("/:cid/product/:pid", passportCall("jwt"),  updateCart);
 
 
 

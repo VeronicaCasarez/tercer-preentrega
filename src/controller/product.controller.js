@@ -2,6 +2,8 @@ import CustomError from "../services/CustomError.js";
 import EErrors from "../services/enum.js";
 import { generateProductErrorInfo } from "../services/info.js";
 import { productService } from "../repositories/services.js";
+import notifier from "node-notifier";
+
 
 //CREAR PRODUCTO
 const saveProduct = async (req, res) => {
@@ -12,8 +14,7 @@ const saveProduct = async (req, res) => {
     if (!productData || !productData.name || !productData.description || !productData.price || !productData.category || !productData.availability) {
       throw new CustomError(EErrors.InvalidData, "Los datos del producto son inválidos.");
     }
- console.log("en el conttoler",user)
-    // Establece el campo 'owner' del producto
+     // Establece el campo 'owner' del producto
     productData.owner = user.user.user.email;
 
     await productService.createProduct(productData);
@@ -29,26 +30,6 @@ const saveProduct = async (req, res) => {
   }
 };
 
-
-// const saveProduct = async (req, res) => {
-//     try {
-//       const product = req.body;
-//       if (!product || !product.name || !product.description || !product.price || !product.category || !product.availability) {
-//         throw new CustomError(EErrors.InvalidData, "Los datos del producto son inválidos.");
-//       }
-  
-//       await productService.createProduct(product);
-//       res.send(product);
-//     } catch (error) {
-//       if (error instanceof CustomError) {
-//         const errorInfo = generateProductErrorInfo(error);
-//         res.status(errorInfo.statusCode).json(errorInfo);
-//       } else {
-//         console.error("Error no controlado:", error);
-//         res.status(500).json({ message: "Error interno del servidor." });
-//       }
-//     }
-//   };
   
   ////OBTENER TODOS LOS PRODUCTOS////*** */
   const getAllProducts = async (req, res) => {
@@ -94,29 +75,28 @@ const saveProduct = async (req, res) => {
   };
   
   ////ELIMINA UN PRODUCTO////**** */
-  // const deleteProduct = async (req, res) => {
-  //   const { pid } = req.params;
-  //   const productId = await productService.deleteProduct(pid);
-  //   res.send(productId);
-  // };
   const deleteProduct = async (req, res) => {
     const { pid } = req.params;
     const { user } = req;
-  console.log(user)
-    // Verifica que el usuario sea premium
-    if (user && user.role === 'premium') {
-        
-      // Verifica si el usuario es el propietario del producto
-      if (product && product.owner === user.email) {
-        const productId = await productService.deleteProduct(pid);
-        res.send(productId);
+  
+    try {
+      const product = await productService.getProductById(pid);
+  
+      if (user.user.user.role === 'admin' || (user.user.user.role === 'premium' && product.owner === user.user.user.email)) {
+        const productDeleted = await productService.deleteProduct(pid);
+        res.send(productDeleted);
       } else {
-        res.status(403).send('No tienes permiso para eliminar este producto.');
+         notifier.notify({
+          title: 'Permiso denegado',
+          message:'No tienes permiso para eliminar este producto.'
+        });
       }
-    } else {
-      res.status(403).send('Solo los usuarios premium pueden eliminar productos.');
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Error interno del servidor.');
     }
   };
+  
   
  
 export {saveProduct,getAllProducts,getProductById, deleteProduct,updateProduct,getAllProductsForAdmin,getProductByIdForAdmin}

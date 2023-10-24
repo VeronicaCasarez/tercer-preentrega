@@ -4,6 +4,7 @@ import { updateCartErrorInfo } from "../services/info.js";
 import { cartService } from "../repositories/services.js";
 import { productService } from "../repositories/services.js";
 import { ticketService } from "../repositories/services.js";
+import notifier from "node-notifier";
 
 //CREAR CARRITO////**** */
 const saveCart = async (req, res) => {
@@ -39,7 +40,6 @@ const getCartById = async (req, res) => {
     }),
     total: cartById.total,
   };
-  console.log(newCart);
   res.render("cart", newCart);
 };
 
@@ -47,23 +47,43 @@ const getCartById = async (req, res) => {
 const updateCart = async (req, res) => {
   const cid = req.user.user.user.cart;
   const pid = req.params.pid;
-
-  console.log("estoy en el controlador 1", cid, pid);
+  const role = req.user.user.user.role;
+  const email = req.user.user.user.email;
+ 
   try {
-    const productInCart = await cartService.isProductInCart(cid, pid);
-    console.log("estoy en el controlador 2", productInCart);
-
-    if (productInCart) {
-      console.log("estoy en el controlador, soy el product in cart", productInCart);
-      return cartService.incrementProductQuantity(cid, pid);
+    const product = await productService.getProductById(pid);
+  
+    if (role === 'premium' && product.owner === email) {
+      notifier.notify({
+        title: 'Denegada',
+        message: 'No puedes agregar tu propio producto al carrito'
+        
+      });
+      return;
     } else {
-      return cartService.addProductToCart(cid, pid);
+      const productInCart = await cartService.isProductInCart(cid, pid);
+      
+      if (productInCart) {
+        notifier.notify({
+          title: 'Exito',
+          message: 'Producto agregado al carrito'
+          
+        });
+        return cartService.incrementProductQuantity(cid, pid);
+      } else {
+        notifier.notify({
+          title: 'Exito',
+          message: 'Producto agregado al carrito'
+        });
+        return cartService.addProductToCart(cid, pid);
+      }
     }
   } catch (error) {
     console.error("Error al agregar producto al carrito", error);
     throw error;
   }
 };
+
 
 //GENERAR TICKET///*** */
 const generatedTicket = async (req, res) => {
@@ -119,7 +139,8 @@ function getRandomInt(min, max) {
 
 //ELIMINAR CARRITO///*** */
 const deleteCart = async (cartId) => {
-  try {
+   try {
+    console.log("aca de nuevo",cartId)
     const existingCart = await cartService.getCartById(cartId);
 
     if (!existingCart) {
@@ -134,39 +155,4 @@ const deleteCart = async (cartId) => {
 
 export { saveCart, getAllCarts, getCartById, updateCart, generatedTicket, deleteCart };
 
-
-//DESAFIO MANEJO DE ERRORRES
-// async function updateCart(req, res) {
-//   try {
-//     const cid = req.user.user.user.cart;
-//     const pid = req.params.pid;
-//     const product = await productService.getProductById(pid);
-
-//     if (
-//       !product ||
-//       !product.name ||
-//       !product.description ||
-//       !product.price ||
-//       !product.category ||
-//       !product.availability
-//     ) {
-//       throw new CustomError(
-//         EErrors.InvalidData,
-//         "El producto es inválido o tiene datos faltantes."
-//       );
-//     }
-
-//     const updateCart = await cartService.addProductToCart(cid, pid);
-//     console.log(updateCart);
-//     res.send(updateCart);
-//   } catch (error) {
-//     // if (error instanceof CustomError) {
-//     //   const errorInfo = updateCartErrorInfo(error);
-//     //   res.status(errorInfo.statusCode).json(errorInfo);
-//     // } else {
-//       console.error("Error no controlado:", error);
-//       res.status(500).json({ message: "Error interno del servidor." });
-//     // }
-//   }
-// }
 

@@ -52,7 +52,7 @@ document.querySelectorAll(".button-delete-product").forEach((button) => {
 
     try {
       const response = await fetch(
-        `http://localhost:8080/api/updateproducts/${productId}`,
+        `/api/updateproducts/${productId}`,
         {
           method: "DELETE",
           headers: {

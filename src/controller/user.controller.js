@@ -68,12 +68,14 @@ const getUserById = async(req,res)=>{
     res.send (userId)
 }
 
+//OBTENER USUARIO POR ID PARA CAMBIAR ROL///////*** */
 const getUserForChange = async(req,res)=>{
   const uid=req.params.uid;
   const userId = await userService.getUserById(uid);
   res.render ('changerole',{userId})
 }
 
+//CAMBIAR ROL DE USUARIO///////*** */
 const changeRoleUser = async(req,res)=>{
   const uid=req.params.uid;
   const {newRole}=req.body;
@@ -81,6 +83,7 @@ const changeRoleUser = async(req,res)=>{
   res.send (user)
 }
 
+//OBTENER USUARIO POR EMAIL///////*** */
 const getUserByEmail = async(req,res)=>{
   const email=req.params.userEmail;
   const userId = await userService.getUserIdByEmail(email);
