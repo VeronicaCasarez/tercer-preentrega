@@ -8,10 +8,13 @@ export default class UserRepository {
     getAllUsers = () => {
       return this.dao.getAll();
     };
-    getUserById = (params) => {
-      return this.dao.getById(params);
+    getUserById = (uid) => {
+      return this.dao.getById(uid);
     };
-    updateUser = (id, user) => {
-      return this.dao.update(id, user);
+    getUserIdByEmail = (email) => {
+      return this.dao.getByEmail(email);
+    };
+    updateUser = (uid, newRole) => {
+      return this.dao.update(uid, newRole);
     };
   }

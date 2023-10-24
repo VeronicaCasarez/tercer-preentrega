@@ -1,7 +1,6 @@
 //import { USERDAO } from "../dao/index.js";
 import { userService } from "../repositories/services.js";
 
-
 //GUARDAR UN USUARIO////****** */
 const saveUser = async (req, res) => {
     const { first_name, last_name, email, age, password } = req.body;
@@ -69,4 +68,22 @@ const getUserById = async(req,res)=>{
     res.send (userId)
 }
 
-export {saveUser,getAllUsers,getUserById}
+const getUserForChange = async(req,res)=>{
+  const uid=req.params.uid;
+  const userId = await userService.getUserById(uid);
+  res.render ('changerole',{userId})
+}
+
+const changeRoleUser = async(req,res)=>{
+  const uid=req.params.uid;
+  const {newRole}=req.body;
+  const user = await userService.updateUser(uid,newRole);
+  res.send (user)
+}
+
+const getUserByEmail = async(req,res)=>{
+  const email=req.params.userEmail;
+  const userId = await userService.getUserIdByEmail(email);
+  res.send (userId)
+}
+export {saveUser,getAllUsers,getUserById,changeRoleUser,getUserForChange,getUserByEmail}

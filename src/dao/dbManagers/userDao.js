@@ -15,10 +15,28 @@ export default class Users {
     getById = async(uid) =>{
         let result = await userModel.findById({_id:uid});
         return result;
-    }
-    update = async(id,user) =>{
-        delete user._id;
-        let result = await userModel.updateOne({_id:id},{$set:user})
-        return result;
-    }
+    };
+
+    getByEmail = async (email) => {
+        try {
+          const user = await userModel.findOne({ email: email });
+          if (user) {
+            return user._id; 
+          } else {
+            return null; 
+          }
+        } catch (error) {
+          throw error; 
+        }
+      };
+      
+      update = async (uid, newRole) => {
+        try {
+          const result = await userModel.findByIdAndUpdate(uid, { role: newRole });
+          return result;
+        } catch (error) {
+          throw error;
+        }
+      };
+      
 }

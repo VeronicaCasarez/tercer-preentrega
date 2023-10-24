@@ -105,11 +105,17 @@ const generatedTicket = async (req, res) => {
     }
 
     product.availability -= quantity;
-    await product.save();
+    await productService.updateProduct(productId,product);
     await cartService.removeProductFromCart(cid, product.id);
   }
   res.send(ticket);
 };
+
+
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 
 //ELIMINAR CARRITO///*** */
 const deleteCart = async (cartId) => {

@@ -3,26 +3,51 @@ import EErrors from "../services/enum.js";
 import { generateProductErrorInfo } from "../services/info.js";
 import { productService } from "../repositories/services.js";
 
-////CREAR PRODUCTO////*** */
+////CREAR PRODUCTO////
 const saveProduct = async (req, res) => {
-    try {
-      const product = req.body;
-      if (!product || !product.name || !product.description || !product.price || !product.category || !product.availability) {
-        throw new CustomError(EErrors.InvalidData, "Los datos del producto son inválidos.");
-      }
-  
-      await productService.createProduct(product);
-      res.send(product);
-    } catch (error) {
-      if (error instanceof CustomError) {
-        const errorInfo = generateProductErrorInfo(error);
-        res.status(errorInfo.statusCode).json(errorInfo);
-      } else {
-        console.error("Error no controlado:", error);
-        res.status(500).json({ message: "Error interno del servidor." });
-      }
+  try {
+    const productData = req.body;
+    const user = req.user; 
+
+    if (!productData || !productData.name || !productData.description || !productData.price || !productData.category || !productData.availability) {
+      throw new CustomError(EErrors.InvalidData, "Los datos del producto son inválidos.");
     }
-  };
+
+    // Asigna el correo electrónico del usuario al campo 'owner' del producto
+    productData.owner = user.user.user.email; 
+
+    await productService.createProduct(productData);
+    res.send(productData);
+  } catch (error) {
+    if (error instanceof CustomError) {
+      const errorInfo = generateProductErrorInfo(error);
+      res.status(errorInfo.statusCode).json(errorInfo);
+    } else {
+      console.error("Error no controlado:", error);
+      res.status(500).json({ message: "Error interno del servidor." });
+    }
+  }
+};
+
+// const saveProduct = async (req, res) => {
+//     try {
+//       const product = req.body;
+//       if (!product || !product.name || !product.description || !product.price || !product.category || !product.availability) {
+//         throw new CustomError(EErrors.InvalidData, "Los datos del producto son inválidos.");
+//       }
+  
+//       await productService.createProduct(product);
+//       res.send(product);
+//     } catch (error) {
+//       if (error instanceof CustomError) {
+//         const errorInfo = generateProductErrorInfo(error);
+//         res.status(errorInfo.statusCode).json(errorInfo);
+//       } else {
+//         console.error("Error no controlado:", error);
+//         res.status(500).json({ message: "Error interno del servidor." });
+//       }
+//     }
+//   };
   
   ////OBTENER TODOS LOS PRODUCTOS////*** */
   const getAllProducts = async (req, res) => {
@@ -30,7 +55,7 @@ const saveProduct = async (req, res) => {
     const user = req.user;
     const cartId = req.user.user.user.cart;
     const userRole = user.user.user.role;
-    const showEditButton = userRole === 'admin';
+    const showEditButton = userRole === 'admin' || userRole === 'premium' ? true : false;
     res.render('product', { products: products, user: user, cartId: cartId, showEditButton });
   };
   

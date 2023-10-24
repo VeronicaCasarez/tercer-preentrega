@@ -6,7 +6,7 @@ const updateProductForm = document.getElementById('updateProductForm');
 updateProductForm.addEventListener('submit', async (event) => {
   event.preventDefault();
 
-   // Obtén la URL actual
+   // Obtener la URL actual
 
 
 // Divide la URL usando "/" como separador

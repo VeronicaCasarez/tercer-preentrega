@@ -11,7 +11,7 @@ router.get("", passportCall('jwt'), async (req, res) => {
 
   try {
     const cartId=req.user.user.user.cart;
-    console.log("estoy en el logout", cartId)
+    
      // Eliminar el carrito de compras
      await deleteCart(cartId); 
     // Destruir la sesión 

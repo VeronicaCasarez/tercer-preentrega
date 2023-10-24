@@ -4,8 +4,11 @@
         {{#if user}}
             <p>Usuario: {{user.user.user.email}}</p>
             <p>Rol: {{user.user.user.role}}</p>
+            <p>Rol: {{user.user.user._id}}</p>
             
             <button type="button" class="btn btn-secondary cart-button"  id="{{user.user.user.cart}}"> Ir al carrito</button>
+            <button type="button" class="btn btn-secondary change-role-button" id="{{user.user.user._id}}" > Cambiar rol</button>
+           
             <a  id="socket-button" class="btn btn-secondary m-2 ml-10 "  href="/chat">Ir al chat</a>
             <a  id="logout-button"  class="btn btn-secondary m-2 ml-10 ">Cerrar Sesión</a>
         {{/if}}
@@ -54,6 +57,7 @@
  <script src="/js/logout.js"></script>
   <script src="/js/cart.js"></script>
    <script src="/js/updateproducts.js"></script>
+   <script src="/js/changerole.js"></script>
 
 
 
