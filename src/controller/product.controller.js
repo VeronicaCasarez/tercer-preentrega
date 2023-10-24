@@ -3,7 +3,7 @@ import EErrors from "../services/enum.js";
 import { generateProductErrorInfo } from "../services/info.js";
 import { productService } from "../repositories/services.js";
 
-////CREAR PRODUCTO////
+//CREAR PRODUCTO
 const saveProduct = async (req, res) => {
   try {
     const productData = req.body;
@@ -12,9 +12,9 @@ const saveProduct = async (req, res) => {
     if (!productData || !productData.name || !productData.description || !productData.price || !productData.category || !productData.availability) {
       throw new CustomError(EErrors.InvalidData, "Los datos del producto son inválidos.");
     }
-
-    // Asigna el correo electrónico del usuario al campo 'owner' del producto
-    productData.owner = user.user.user.email; 
+ console.log("en el conttoler",user)
+    // Establece el campo 'owner' del producto
+    productData.owner = user.user.user.email;
 
     await productService.createProduct(productData);
     res.send(productData);
@@ -28,6 +28,7 @@ const saveProduct = async (req, res) => {
     }
   }
 };
+
 
 // const saveProduct = async (req, res) => {
 //     try {
@@ -69,8 +70,9 @@ const saveProduct = async (req, res) => {
 
 ////OBTENER TODOS LOS PRODUCTOS, LOS MUESTRA AL ADMIN////*** */
   const getAllProductsForAdmin = async (req, res) => {
+    const user=req.user; 
     const products = await productService.getAllProducts();
-    res.render('updateproducts', { products: products });
+    res.render('updateproducts', { products: products,user:user });
   };
   
 ////OBTENER UN PRODUCTO, LOS MUESTRA AL ADMIN////*** */
@@ -92,10 +94,28 @@ const saveProduct = async (req, res) => {
   };
   
   ////ELIMINA UN PRODUCTO////**** */
+  // const deleteProduct = async (req, res) => {
+  //   const { pid } = req.params;
+  //   const productId = await productService.deleteProduct(pid);
+  //   res.send(productId);
+  // };
   const deleteProduct = async (req, res) => {
     const { pid } = req.params;
-    const productId = await productService.deleteProduct(pid);
-    res.send(productId);
+    const { user } = req;
+  console.log(user)
+    // Verifica que el usuario sea premium
+    if (user && user.role === 'premium') {
+        
+      // Verifica si el usuario es el propietario del producto
+      if (product && product.owner === user.email) {
+        const productId = await productService.deleteProduct(pid);
+        res.send(productId);
+      } else {
+        res.status(403).send('No tienes permiso para eliminar este producto.');
+      }
+    } else {
+      res.status(403).send('Solo los usuarios premium pueden eliminar productos.');
+    }
   };
   
  

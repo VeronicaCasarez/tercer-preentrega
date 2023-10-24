@@ -10,7 +10,7 @@ router.get("/", passportCall('jwt') ,getAllProducts);
 //router.post("/",saveProduct);
 router.get("/:pid",getProductById);
 //router.post("/:pid",updatedProduct);
-//router.delete("/:pid",deletedProduct);
+//router.delete("/:pid",deleteProduct);
 
 
 

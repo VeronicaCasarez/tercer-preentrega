@@ -25,6 +25,7 @@ console.log(pid)
     price,
     category,
     availability,
+    owner
   };
 
   // Realiza una solicitud POST al servidor para crear el producto
