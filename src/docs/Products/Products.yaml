@@ -12,7 +12,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#components/schemas/Product"
+                  $ref: "#/components/schemas/Product"
         "500":
           description: Error interno del servidor, usualmente generado por una query defectuosa
 
@@ -34,7 +34,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#components/schemas/Product"
+                $ref: "#/components/schemas/Product"
         "500":
           description: Error interno del servidor, usualmente generado por una query defectuosa
 
@@ -54,7 +54,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#components/schemas/UpdateProductRequest"
+              $ref: "#/components/schemas/UpdateProductRequest"
 
 components:
   schemas:
@@ -78,7 +78,7 @@ components:
           description: Disponibilidad del producto
         owner:
           type: String
-          description: Propietario del producto (por defecto: 'admin')
+          description: Propietario del producto (por defecto, 'admin')
       example:
         name: "Producto Ejemplo"
         description: "Descripción del producto de ejemplo"
