@@ -32,6 +32,9 @@ import {__dirname} from "./utils.js";
 import { loggerMiddleware } from "./logger.js";
 import LoggerRouter from "./routes/loggertest.routes.js"
 
+import swaggerJsdoc from "swagger-jsdoc";
+import swaggerUiExpress from "swagger-ui-express";
+
 dotenv.config();
 const app = express();
 const httpServer = createServer(app);
@@ -89,11 +92,28 @@ const environment = async () => {
 
 environment();
 
+//SwaggerOptions
+const SwaggerOptions = {
+  definition: {
+    openapi: "3.0.1",
+    info: {
+      title: "Documentacion del proyecto",
+      description: "Curso Backend",
+    },
+  },
+  apis: [`${__dirname}/docs/**/*.yaml`],
+};
+
+//conectamos Swagger
+const specs = swaggerJsdoc(SwaggerOptions);
+
+
 // Ruta para probar los logs
 app.use(loggerMiddleware);
 app.use("/loggertest",LoggerRouter);
 
 //manejo de las rutas
+app.use("/apidocs", swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
 app.use("/", LoginRoute);
 app.use("/signup", SignupRoute);
 app.use("/api/session/", SessionRoute);
