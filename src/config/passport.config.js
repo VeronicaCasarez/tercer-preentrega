@@ -63,7 +63,6 @@ const initializePassport = () => {
         callbackURL: GITHUB_CALLBACK_URL,
       },
       async (accessToken, refreshToken, profile, done) => {
-        console.log(profile)
         try {
           let user = await UserModel.findOne({
             email: profile?.emails[0]?.value,
@@ -99,7 +98,7 @@ const initializePassport = () => {
           const { first_name, last_name, email, age } = req.body;
           try {
             const user = await UserModel.findOne({ email: username });
-            console.log("user", user);
+            
             if (user) {
                 console.log("El usuario ya existe.");
                 return done(null, false, { message: "Usuario ya existe" });
@@ -108,7 +107,8 @@ const initializePassport = () => {
               first_name,
               last_name,
               age,
-              email,             
+              email,    
+              last_connection:null,    
               password: createHash(password),
               
 
@@ -139,6 +139,9 @@ const initializePassport = () => {
             if (!isValidPassword(user.password, password)) {
               return done(null, false, { message: "Wrong password" });
             }
+            // Actualizar last_connection y guardar en la base de datos
+            user.last_connection = new Date();
+            await user.save();
             return done(null, user); 
           } catch (error) {
             return done(error); 

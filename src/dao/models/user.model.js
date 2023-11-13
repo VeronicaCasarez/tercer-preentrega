@@ -7,22 +7,20 @@ const userSchema = new mongoose.Schema({
   last_name: String,
   email: { type: String, unique: true },
   age: Number,
-  password: String, 
+  password: String,
   cart: { type: mongoose.Schema.Types.ObjectId, ref: 'Carts' },
   role: { type: String, default: 'user' },
+  last_connection: { type: Date,default:null },
+  documents: [
+    {
+      name: String,
+      reference: String,
+    }
+  ],
+  
 });
   
-// userSchema.pre("findById", function () {
-//   this.populate("carts.product");
-// });
 
-// userSchema.pre("findOne", function () {
-//   this.populate("carts.product");
-// });
-
-// userSchema.pre("find", function () {
-//   this.populate("carts.product");
-// });
 
 const User = mongoose.model(userCollection, userSchema);
 

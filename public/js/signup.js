@@ -5,6 +5,7 @@ async function postSignup(first_name, last_name, age, username, password) {
     age,
     email: username,
     password,
+     
   };
 
   console.log("all  the data", data);
@@ -36,9 +37,10 @@ signupForm.addEventListener("submit", function (event) {
   const first_name = document.getElementById("first_name").value;
   const last_name = document.getElementById("last_name").value;
   const age = document.getElementById("age").value;
+  
 
   postSignup(first_name, last_name, age, username, password).then((datos) =>
-    console.log(datos)
+  console.log("estoy registrandome",datos)
   );
 });
 // async function postSignup(first_name, last_name, age, username, password) {

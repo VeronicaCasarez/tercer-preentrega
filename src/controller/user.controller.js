@@ -79,10 +79,22 @@ const getUserForChange = async(req,res)=>{
 const changeRoleUser = async(req,res)=>{
   const uid=req.params.uid;
   const {newRole}=req.body;
-  const user = await userService.updateUser(uid,newRole);
-  res.send (user)
-}
+  // Obtener información sobre la carga de documentos del usuario
+ const user = await userService.getUserById(uid);
+    
+ // Verificar la existencia de los documentos requeridos
+ const requiredDocuments = ['identification', 'addressProof', 'bankStatement'];
+ const hasRequiredDocuments = requiredDocuments.every(documentType =>
+   user.documents.some(document => document.name === documentType)
+ );
 
+ if (hasRequiredDocuments) {
+   // Cambiar el rol del usuario solo si ha cargado los documentos
+   const updatedUser = await userService.updateUser(uid, newRole);
+   
+    res.send (updatedUser)
+  }
+}
 //OBTENER USUARIO POR EMAIL///////*** */
 const getUserByEmail = async(req,res)=>{
   const email=req.params.userEmail;

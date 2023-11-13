@@ -18,8 +18,10 @@ router.post("/login", async (req, res) => {
   } else {
     // Crea un carrito vacío para el usuario
     const cart = [];
+    console.log("aca estoy")
     // Crea un nuevo carrito en la base de datos y guarda el ID en el usuario
     const newCart = await CartModel.create({ products: cart });
+    user.last_connection=new Date();
     user.cart = newCart._id; // Asigna el ID del nuevo carrito al usuario
     // Guarda los cambios en el usuario
     await user.save();
