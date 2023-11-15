@@ -100,5 +100,44 @@ const getUserByEmail = async(req,res)=>{
   const email=req.params.userEmail;
   const userId = await userService.getUserIdByEmail(email);
   res.send (userId)
-}
-export {saveUser,getAllUsers,getUserById,changeRoleUser,getUserForChange,getUserByEmail}
+};
+
+//IR A LA RUTA DE SUBIR DOCUMENTOS
+const goUpDocument =async(req,res)=>{
+  const uid=req.params.uid;
+  const userId = await userService.getUserById(uid);
+  res.render ('updocument',{userId})
+};
+
+//SUBIR DOCUMENTOS CON MULTER
+const uploadDocument = async (req, res) => {
+  try {
+    const userId = req.params.uid;
+    const user = await userService.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: "Usuario no encontrado" });
+    }
+
+    // Procesar cada archivo y actualizar el modelo del usuario
+    req.files.forEach(file => {
+      const documentType = file.fieldname;
+      // Actualizar el modelo del usuario con la información del documento
+      user.documents.push({
+        name: file.originalname,
+        reference: `link/al/documento/${file.originalname}`
+      });
+    });
+
+    // Guardar los cambios en el usuario
+    await userService.uploadDoc(uid,);
+
+    return res.status(200).json({ message: "Documentos subidos exitosamente" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+
+export {saveUser,getAllUsers,getUserById,changeRoleUser,getUserForChange,getUserByEmail,goUpDocument,uploadDocument}
