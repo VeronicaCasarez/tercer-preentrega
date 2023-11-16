@@ -9,6 +9,7 @@ const productSchema = new mongoose.Schema({
   price: { type: Number, required: true },
   category: { type: String, required: true },
   availability: { type: Number, required: true },
+  productImage: String,
   // owner: { type: String, default: 'admin', validate: {
   //   validator: function(email) {
 

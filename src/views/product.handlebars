@@ -8,7 +8,7 @@
             
             <button type="button" class="btn btn-secondary cart-button"  id="{{user.user.user.cart}}"> Ir al carrito</button>
             <button type="button" class="btn btn-secondary change-role-button" id="{{user.user.user._id}}" > Cambiar rol</button>
-           
+            <a  id="profile-button" class="btn btn-secondary m-2 ml-10 "  href="/api/users/{{user.user.user._id}}/profile">Ir al perfil</a> 
             <a  id="socket-button" class="btn btn-secondary m-2 ml-10 "  href="/chat">Ir al chat</a>
             <button type="button" class="btn btn-secondary go-to-up-document"  id="{{user.user.user._id}}"> Subir documentos</button>
             <a  id="logout-button"  class="btn btn-secondary m-2 ml-10 ">Cerrar Sesión</a>

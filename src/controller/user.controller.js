@@ -1,5 +1,9 @@
 //import { USERDAO } from "../dao/index.js";
 import { userService } from "../repositories/services.js";
+import multer from 'multer';
+
+// Configuración de Multer para la subida de imágenes de perfil
+const profileImageUpload = multer({ dest: 'api/users/upload/profile/' });
 
 //GUARDAR UN USUARIO////****** */
 const saveUser = async (req, res) => {
@@ -20,6 +24,7 @@ const saveUser = async (req, res) => {
         email,
         age,
         password,
+       
       });
   
       // Asociar un carrito vacío al nuevo usuario
@@ -95,6 +100,7 @@ const changeRoleUser = async(req,res)=>{
     res.send (updatedUser)
   }
 }
+
 //OBTENER USUARIO POR EMAIL///////*** */
 const getUserByEmail = async(req,res)=>{
   const email=req.params.userEmail;
@@ -109,7 +115,37 @@ const goUpDocument =async(req,res)=>{
   res.render ('updocument',{userId})
 };
 
-//SUBIR DOCUMENTOS CON MULTER
+//GUARDAR LA IMAGEN DE PERFIL
+const uploadProfileImage = async (req, res) => {
+  try {
+    const userId = req.params.uid;
+
+    profileImageUpload.single('profileImage')(req, res, async (err) => {
+      if (err) {
+        // Manejar errores
+        res.status(500).send('Error al subir la imagen de perfil');
+      } else {
+        const imagePath = req.file.path; // Ruta temporal del archivo subido
+        // Llamar a la función upAvatarUser para actualizar la imagen de perfil del usuario
+        try {
+          await userService.upAvatarUser(userId, imagePath);
+          res.status(200).send('Imagen de perfil subida correctamente');
+        } catch (error) {
+          // Manejar errores de actualización en la base de datos
+          res.status(500).send('Error al actualizar la imagen de perfil en la base de datos');
+        }
+      }
+    });
+  } catch (error) {
+    // Manejar errores generales
+    res.status(500).send('Error interno en el servidor');
+  }
+};
+
+
+
+
+// //SUBIR DOCUMENTOS CON MULTER
 const uploadDocument = async (req, res) => {
   try {
     const userId = req.params.uid;
@@ -140,4 +176,11 @@ const uploadDocument = async (req, res) => {
 };
 
 
-export {saveUser,getAllUsers,getUserById,changeRoleUser,getUserForChange,getUserByEmail,goUpDocument,uploadDocument}
+const getProfile =async(req,res)=>{
+  const userId=req.params.uid;
+  const profile= await userService.getUserById(userId);
+  console.log("estoy en el profile",profile)
+  res.render('profile',{profile:profile})
+}
+
+export {saveUser,getAllUsers,getUserById,changeRoleUser,getUserForChange,getUserByEmail,goUpDocument,uploadProfileImage,uploadDocument,getProfile}

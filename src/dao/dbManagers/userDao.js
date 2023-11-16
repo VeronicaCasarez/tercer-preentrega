@@ -38,5 +38,19 @@ export default class Users {
           throw error;
         }
       };
+
+      upAvatar = async(uid, imagePath)=> {
+        try {
+          const user = await userModel.findById(uid);
+          if (!user) {
+            throw new Error('Usuario no encontrado');
+          }
+          user.profileImage = imagePath;
+          const updatedUser = await userModel.save();
+          return updatedUser;
+        } catch (error) {
+          throw new Error('Error al actualizar la imagen de perfil del usuario');
+        }
+      }
       
 }

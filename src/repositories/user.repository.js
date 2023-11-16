@@ -17,4 +17,7 @@ export default class UserRepository {
     updateUser = (uid, newRole) => {
       return this.dao.update(uid, newRole);
     };
+    uploadProfileUser = (uid, imagePath) => {
+      return this.dao.upAvatar(uid, imagePath);
+    };
   }

@@ -1,6 +1,6 @@
 import { Router } from "express";
 import multer from 'multer';
-import { saveUser,getAllUsers,getUserById,changeRoleUser, getUserForChange,getUserByEmail,goUpDocument,uploadDocument } from "../controller/user.controller.js";
+import { saveUser,getAllUsers,getUserById,changeRoleUser, getUserForChange,getUserByEmail,goUpDocument,uploadDocument,getProfile } from "../controller/user.controller.js";
 import { passportCall } from "../utils.js";
 import { isUser,isAdmin } from "./middlewares.routes.js";
 
@@ -18,6 +18,6 @@ router.post("/premium/:uid",passportCall("jwt"),changeRoleUser);
 router.get("/byemail/:userEmail",passportCall("jwt"),getUserByEmail);
 router.get("/:uid/documents",passportCall("jwt"),goUpDocument)
 router.post("/:uid/documents", passportCall("jwt"), upload.array('documents'), uploadDocument);
-
+router.get("/:uid/profile",passportCall("jwt"),getProfile)
 
 export default router;
