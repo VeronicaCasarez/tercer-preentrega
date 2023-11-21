@@ -45,6 +45,8 @@ const PORT = process.env.PORT || 8080;
 
 //manejo de archivos staticos y json
 app.use(express.static("public"));
+app.use('api/users/upload/profile', express.static('api/users/upload/profile'));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

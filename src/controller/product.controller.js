@@ -38,6 +38,7 @@ const saveProduct = async (req, res) => {
     const cartId = req.user.user.user.cart;
     const userRole = user.user.user.role;
     const showEditButton = userRole === 'admin' || userRole === 'premium' ? true : false;
+
     res.render('product', { products: products, user: user, cartId: cartId, showEditButton });
   };
   

@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema({
   password: String,
   cart: { type: mongoose.Schema.Types.ObjectId, ref: 'Carts' },
   role: { type: String, default: 'user' },
-  profileImage: {type:String, default: null}, // Guarda la ruta de la imagen de perfil
+  profileImage: { type: String, default: 'default-avatar.jpg' }, // Ruta de la imagen de perfil
   last_connection: { type: Date,default:null },
   documents: [
     {
