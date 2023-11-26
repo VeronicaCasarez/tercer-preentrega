@@ -5,7 +5,7 @@ import notifier from 'node-notifier';
 
 
 // Configuración de Multer para la subida de imágenes de perfil
-const profileImageUpload = multer({ dest: 'public/upload/profile/' });
+const profileImageUpload = multer({ dest: 'public/upload/profiles/' });
 
 //GUARDAR UN USUARIO////****** */
 const saveUser = async (req, res) => {
@@ -117,7 +117,7 @@ const goUpDocument =async(req,res)=>{
   res.render ('updocument',{userId})
 };
 
-//GUARDAR LA IMAGEN DE PERFIL
+//GUARDAR LA IMAGEN DE PERFIL CON MULTER
 const uploadProfileUser = async (req, res) => {
   try {
     const userId = req.params.uid; 
@@ -133,38 +133,14 @@ const uploadProfileUser = async (req, res) => {
       message: 'Tu imagen fue agregada al perfil'
       
     });
+   
+    res.redirect(303, `/api/users/${userId}/profile`);
   } catch (error) {
+    
     res.status(500).json({ error: 'Error interno del servidor al subir la imagen de perfil' });
   }
+   
 };
-
-// const uploadProfileImage = async (req, res) => {
-//   try {
-//     const userId = req.params.uid;
-
-//     profileImageUpload.single('profileImage')(req, res, async (err) => {
-//       if (err) {
-//         // Manejar errores
-//         res.status(500).send('Error al subir la imagen de perfil');
-//       } else {
-//         const imagePath = req.file.path; // Ruta temporal del archivo subido
-//         // Llamar a la función upAvatarUser para actualizar la imagen de perfil del usuario
-//         try {
-//           await userService.upAvatarUser(userId, imagePath);
-//           res.status(200).send('Imagen de perfil subida correctamente');
-//         } catch (error) {
-//           // Manejar errores de actualización en la base de datos
-//           res.status(500).send('Error al actualizar la imagen de perfil en la base de datos');
-//         }
-//       }
-//     });
-//   } catch (error) {
-//     // Manejar errores generales
-//     res.status(500).send('Error interno en el servidor');
-//   }
-// };
-
-
 
 
 // //SUBIR DOCUMENTOS CON MULTER
@@ -197,12 +173,20 @@ const uploadDocument = async (req, res) => {
   }
 };
 
-
+//IR AL PERFIL
 const getProfile =async(req,res)=>{
   const userId=req.params.uid;
   const profile= await userService.getUserById(userId);
   console.log("estoy en el profile",profile)
   res.render('profile',profile)
+};
+
+//OBTENER EL AVATAR
+const getAvatar =async(req,res)=>{
+  const userId=req.params.uid;
+  const showAvatar= await userService.getAvatar(userId);
+ 
+  res.send(showAvatar)
 }
 
 export {saveUser,
@@ -214,4 +198,5 @@ export {saveUser,
   goUpDocument,
   uploadDocument,
   getProfile,
-  uploadProfileUser}
+  uploadProfileUser,
+  getAvatar}

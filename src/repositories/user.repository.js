@@ -20,4 +20,8 @@ export default class UserRepository {
     uploadProfileUser = (uid, imagePath) => {
       return this.dao.upAvatar(uid, imagePath);
     };
+
+    getAvatar = (uid) => {
+      return this.dao.avatar(uid);
+    };
   }

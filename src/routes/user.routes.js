@@ -9,7 +9,8 @@ import { saveUser,
     goUpDocument,
     uploadDocument,
     getProfile,
-    uploadProfileUser} from "../controller/user.controller.js";
+    uploadProfileUser,
+    getAvatar} from "../controller/user.controller.js";
 import { passportCall } from "../utils.js";
 import { isUser,isAdmin } from "./middlewares.routes.js";
 import { uploadProfileImage } from "../config/multer.config.js";
@@ -27,9 +28,11 @@ router.get("/premium/:uid",passportCall("jwt"),getUserForChange);
 router.post("/premium/:uid",passportCall("jwt"),changeRoleUser);
 router.get("/byemail/:userEmail",passportCall("jwt"),getUserByEmail);
 router.get("/:uid/documents",passportCall("jwt"),goUpDocument);
-router.post('/:uid/upload-avatar', uploadProfileImage.single('profiles'), uploadProfileUser);
+router.get("/:uid/profile/",passportCall("jwt"),getProfile);
+//router.get("/:uid/upload-avatar/:uid",passportCall("jwt"),getAvatar);
+router.post('/:uid/upload-avatar/', uploadProfileImage.single('profiles'), uploadProfileUser);
 
 router.post("/:uid/documents", passportCall("jwt"), upload.array('documents'), uploadDocument);
-router.get("/:uid/profile",passportCall("jwt"),getProfile)
+
 
 export default router;

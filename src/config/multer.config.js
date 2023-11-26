@@ -3,24 +3,57 @@ import path from 'path';
 import dotenv from "dotenv";
 import { __dirname } from '../utils.js';
 
-// Configuración de almacenamiento para diferentes carpetas
-const storage = (folderName) => multer.diskStorage({
-  destination: (req, file, cb) => {
-    const uploadPath = path.join(__dirname, '../public/upload/' );
+// Definición de la función storage que determina la carpeta de destino
+function storage(folderName) {
+  return multer.diskStorage({
+    destination: function (req, file, cb) {
 
-    cb(null, uploadPath);
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1E9)}`;
-    const fileExtension = path.extname(file.originalname);
-    cb(null, `${file.fieldname}-${uniqueSuffix}${fileExtension}`);
-  },
-});
+      if (folderName === 'profiles') {
+        const uploadPath = path.join(__dirname, '../public/upload/profiles/' );
+        cb(null, uploadPath);
+      } else if (folderName === 'products') {
+        const uploadPath = path.join(__dirname, '../public/upload/products/' );
+        cb(null, uploadPath);
+      } else if (folderName === 'documents') {
+        const uploadPath = path.join(__dirname, '../public/upload/documents/' );
+        cb(null, uploadPath);
+      } else {
+        cb(new Error('Tipo de archivo no válido'));
+      }
+    },
+    filename: function (req, file, cb) {
+      const userId = req.params.uid; 
+      const uniqueFilename = `${userId}_${file.originalname}`;
 
-// Middleware de Multer para diferentes carpetas
+      cb(null, uniqueFilename);
+    },
+  });
+}
+
+// Configuración de multer para subir diferentes tipos de archivos a diferentes carpetas
 export const uploadProfileImage = multer({ storage: storage('profiles') });
 export const uploadProductImage = multer({ storage: storage('products') });
 export const uploadDocument = multer({ storage: storage('documents') });
+
+
+// // Configuración de almacenamiento para diferentes carpetas
+// const storage = (folderName) => multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     const uploadPath = path.join(__dirname, '../public/upload/', ${folderName} );
+
+//     cb(null, uploadPath);
+//   },
+//   filename: function (req, file, cb) {
+//     const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1E9)}`;
+//     const fileExtension = path.extname(file.originalname);
+//     cb(null, `${file.fieldname}-${uniqueSuffix}${fileExtension}`);
+//   },
+// });
+
+// // Middleware de Multer para diferentes carpetas
+// export const uploadProfileImage = multer({ storage: storage('profiles') });
+// export const uploadProductImage = multer({ storage: storage('products') });
+// export const uploadDocument = multer({ storage: storage('documents') });
 
 // // multerConfig.js
 // import multer from 'multer';

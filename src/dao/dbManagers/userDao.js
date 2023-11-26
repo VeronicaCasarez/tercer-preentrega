@@ -55,6 +55,12 @@ export default class Users {
           throw new Error('Error al actualizar la ruta de la imagen en la base de datos');
         }
       };
+
+      avatar= async (uid) => {
+        let user = await userModel.find(uid);
+        const avatar = user.profileImage;
+        return avatar;
+    }
       
 
       // upAvatar= async (userId, imagePath)=> {
