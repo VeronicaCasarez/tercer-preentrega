@@ -2,6 +2,7 @@
 import { userService } from "../repositories/services.js";
 import multer from 'multer';
 import notifier from 'node-notifier';
+import { createUserDTO } from "../DTO/userDTO.js"; 
 
 
 // Configuración de Multer para la subida de imágenes de perfil
@@ -54,18 +55,17 @@ const saveUser = async (req, res) => {
   };
   
 
-//OBTENER TODOS LOS USUARIOS/////**** */
+//OBTENER TODOS LOS USUARIOS/////**** */DTO
 const getAllUsers = async (req, res) => {
-    let users = await userService.getAllUsers();
-    if (!users)
-      return res
-        .status(500)
-        .send({
-          status: "error",
-          error: "Couldn't get users due to internal error",
-        });
-    res.send({ status: "success", payload: users });
-  };
+  try {
+    const allUsers = await userService.getAllUsers(); 
+    const userDTOs = allUsers.map(users => createUserDTO(users));
+    res.render('all-users', { users: userDTOs });
+  } catch (error) {
+    res.status(500).json({ message: 'Error al obtener usuarios', error: error.message });
+  }
+};
+
 
 
  //OBTENER USUARIO POR ID///////*** */
@@ -79,8 +79,10 @@ const getUserById = async(req,res)=>{
 const getUserForChange = async(req,res)=>{
   const uid=req.params.uid;
   const userId = await userService.getUserById(uid);
-  res.render ('changerole',{userId})
-}
+  const users = await userService.getAllUsers(); 
+  console.log("aca tratabdo de renderizar ",users)
+  res.render ('edit-users',{userId:userId,users:users})
+};
 
 //CAMBIAR ROL DE USUARIO///////*** */
 const changeRoleUser = async(req,res)=>{
@@ -98,11 +100,18 @@ const changeRoleUser = async(req,res)=>{
  if (hasRequiredDocuments) {
    // Cambiar el rol del usuario solo si ha cargado los documentos
    const updatedUser = await userService.updateUser(uid, newRole);
-   
+   notifier.notify({
+    title: 'Exito',
+    message: 'Rol modificado'
+  });
     res.send (updatedUser)
-  }
+  }else {
+    notifier.notify({
+      title: 'Error',
+      message: 'El usuario debe cargar los documentos'
+    });
 }
-
+}
 //OBTENER USUARIO POR EMAIL///////*** */
 const getUserByEmail = async(req,res)=>{
   const email=req.params.userEmail;
@@ -114,7 +123,7 @@ const getUserByEmail = async(req,res)=>{
 const goUpDocument =async(req,res)=>{
   const uid=req.params.uid;
   const userId = await userService.getUserById(uid);
-  res.render ('updocument',{userId})
+  res.render ('up-document',{userId})
 };
 
 //GUARDAR LA IMAGEN DE PERFIL CON MULTER
@@ -142,14 +151,11 @@ const uploadDocumentUser = async (req, res) => {
   try {
     const userId = req.params.uid;
     const documentType = req.body.documentType; // Obtener el tipo de documento desde el body
-    console.log("aca en document type",documentType)
-  
     if (!req.file) {
       return res.status(400).json({ error: 'Por favor, selecciona un archivo.' });
     }
 
-    const filePath = req.file.path; // Ruta del archivo subido
- console.log("aca en folepath",filePath)
+    const filePath = req.file.path;
     await userService.uploadDocument(userId, documentType, filePath);
 
     notifier.notify({
@@ -163,36 +169,6 @@ const uploadDocumentUser = async (req, res) => {
   }
 };
 
-// const uploadDocumentUser = async (req, res) => {
-//   try {
-//     const userId = req.params.uid;
-//     upload.single('file')(req, res, async function (err) {
-//       if (err instanceof multer.MulterError) {
-//         return res.status(400).json({ error: 'Error al subir el archivo.' });
-//       } else if (err) {
-//         return res.status(400).json({ error: err });
-//       }
-
-//       // Aquí tienes el archivo subido accesible en req.file
-//       console.log("aca toy")
-//       // Lógica para guardar el archivo subido en userService.uploadProfileUser
-//       const documentType = req.body.documentType;
-//       const filePath = req.file.path; // Ruta del archivo subido
-
-//       await userService.uploadDocument(userId, documentType, filePath);
-
-//       notifier.notify({
-//         title: 'Documento subido',
-//         message: 'Tu documento fue subido correctamente',
-//       });
-//       console.log("aca toy controller")
-//       res.redirect(303, `/api/users/${userId}/profile`);
-//     });
-//   } catch (error) {
-//     res.status(500).json({ error: 'Error interno del servidor al subir el archivo.' });
-//   }
-// };
-
 //IR AL PERFIL
 const getProfile =async(req,res)=>{
   const userId=req.params.uid;
@@ -205,6 +181,17 @@ const getAvatar =async(req,res)=>{
   const userId=req.params.uid;
   const showAvatar= await userService.getAvatar(userId);
   res.send(showAvatar)
+};
+
+//ELIMINAR USUARIO
+const deleteUser =async(req,res)=>{
+  const userId =req.params.uid;
+  const usertodelete= await userService.deleteUser(userId);
+  notifier.notify({
+    title: 'Exito',
+    message: 'Usuario eliminado',
+  });
+  return;
 }
 
 export {saveUser,
@@ -217,4 +204,4 @@ export {saveUser,
   uploadDocumentUser,
   getProfile,
   uploadProfileUser,
-  getAvatar}
+  getAvatar,deleteUser}

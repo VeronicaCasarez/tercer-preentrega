@@ -41,9 +41,9 @@ const saveProduct = async (req, res) => {
     const user = req.user;
     const cartId = req.user.user.user.cart;
     const userRole = user.user.user.role;
-    const showEditButton = userRole === 'admin' || userRole === 'premium' ? true : false;
-
-    res.render('product', { products: products,user: user, cartId: cartId, showEditButton,showAvatar});
+    const showEditProduct = userRole === 'admin' || userRole === 'premium' ? true : false;
+    const showChangeRole = userRole === 'admin'  ? true : false;
+    res.render('home', { products: products,user: user, cartId: cartId, showEditProduct,showAvatar,showChangeRole});
   };
   
 ////OBTENER UN PRODUCTO////*** */
@@ -51,14 +51,14 @@ const saveProduct = async (req, res) => {
     const pid = req.params.pid;
     const productById = await productService.getProductById(pid);
     productById._id = productById._id.toString();
-    res.render('productdetail', productById);
+    res.render('product-detail', productById);
   };
 
 ////OBTENER TODOS LOS PRODUCTOS, LOS MUESTRA AL ADMIN////*** */
   const getAllProductsForAdmin = async (req, res) => {
     const user=req.user; 
     const products = await productService.getAllProducts();
-    res.render('updateproducts', { products: products,user:user });
+    res.render('update-products', { products: products,user:user });
   };
   
 ////OBTENER UN PRODUCTO, LOS MUESTRA AL ADMIN////*** */
@@ -67,7 +67,7 @@ const saveProduct = async (req, res) => {
     const productById = await productService.getProductById(pid);
     productById._id = productById._id.toString();
   
-    res.render('updateoneproduct', { productById });
+    res.render('update-one-product', { productById });
   };
   
   ////ACTUALIZA UN PRODUCTO////

@@ -11,8 +11,8 @@ export default class Users {
     }
     //OBTENER TODOS LOS USUARIOS
     getAll= async () => {
-        let users = await userModel.find();
-        return users.map(user=>user.toObject())
+        let users = await userModel.find().lean();
+        return users;
     }
     //OBTENER USUARIO POR ID
     getById = async(uid) =>{
@@ -32,6 +32,7 @@ export default class Users {
           throw error; 
         }
       };
+
       //CAMBIAR ROL DEL USUARIO
       update = async (uid, newRole) => {
         try {
@@ -41,6 +42,7 @@ export default class Users {
           throw error;
         }
       };
+
       //SUBIR FOTO DE PERFIL
       upAvatar = async (uid, imagePath) => {
         try {
@@ -48,7 +50,6 @@ export default class Users {
           if (!user) {
             throw new Error('Usuario no encontrado');
           }
-          // Actualiza la ruta de la imagen del usuario en la base de datos
           user.profileImage = imagePath;
           await user.save();
       
@@ -65,7 +66,6 @@ export default class Users {
             if (!user) {
               throw new Error('Usuario no encontrado');
             }
-      // Agregar un nuevo documento al arreglo 'documents'
       user.documents.push({
         name: documentType, 
         reference: filePath, 
@@ -79,7 +79,12 @@ export default class Users {
     }
   }
 
+    //ELIMINAR USUARIO
+    delete = async (uid)=>{
+      let userDeleted =await userModel.findByIdAndDelete(uid);
+      return userDeleted;
 
+    }
     //   avatar= async (uid) => {
     //     let user = await userModel.find(uid);
     //     const avatar = user.profileImage;

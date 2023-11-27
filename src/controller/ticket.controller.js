@@ -21,7 +21,7 @@ const saveTicket = async (req, res) => {
     const tid = req.params.tid;
     const ticket = await ticketService.getTicketById(tid);
     ticket._id = ticket._id.toString();
-    res.render('finishpurchase', ticket);
+    res.render('finish-purchase', ticket);
   };
   
   /////OBTENER  TICKET POR EMAIL DE USUARIO //***** */
@@ -30,7 +30,7 @@ const saveTicket = async (req, res) => {
     const ticket = await ticketService.getTicketByEmail(userEmail);
     ticket._id = ticket._id.toString();
     console.log(ticket);
-    res.render('finishpurchase', ticket);
+    res.render('finish-purchase', ticket);
   };
   
 export {saveTicket,getAllTickets,getTicketById,getTicketByEmail}

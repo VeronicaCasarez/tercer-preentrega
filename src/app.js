@@ -52,7 +52,7 @@ app.use(express.static("public"));
 // app.use('/public/documents', express.static(path.join(__dirname, 'public', 'upload', 'documents')));
 
 app.use('/public/upload', express.static(path.join(__dirname, '../public/upload')));
-
+app.use('/public/image', express.static(path.join(__dirname, '../public/image')));
 app.use('/public/upload/profiles', express.static(path.join(__dirname, '/public/upload/profiles')));
 
 app.use('/public/upload/profiles', express.static('/public/upload/profiles'));

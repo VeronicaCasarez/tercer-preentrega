@@ -26,4 +26,7 @@ export default class UserRepository {
     getAvatar = (uid) => {
       return this.dao.avatar(uid);
     };
+    deleteUser = (uid) => {
+      return this.dao.delete(uid);
+    };
   }
