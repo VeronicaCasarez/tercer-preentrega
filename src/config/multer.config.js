@@ -9,13 +9,13 @@ function storage(folderName) {
     destination: function (req, file, cb) {
 
       if (folderName === 'profiles') {
-        const uploadPath = path.join(__dirname, '../public/upload/profiles/' );
+        const uploadPath = ('./public/upload/profiles/' );
         cb(null, uploadPath);
       } else if (folderName === 'products') {
-        const uploadPath = path.join(__dirname, '../public/upload/products/' );
+        const uploadPath = ('./public/upload/products/' );
         cb(null, uploadPath);
       } else if (folderName === 'documents') {
-        const uploadPath = path.join(__dirname, '../public/upload/documents/' );
+        const uploadPath = ('./public/upload/documents/' );
         cb(null, uploadPath);
       } else {
         cb(new Error('Tipo de archivo no válido'));
@@ -23,7 +23,10 @@ function storage(folderName) {
     },
     filename: function (req, file, cb) {
       const userId = req.params.uid; 
-      const uniqueFilename = `${userId}_${file.originalname}`;
+      const documentType = req.body.documentType; 
+
+      const uniqueFilename = `${userId}_${documentType}_${file.originalname}`;
+      
 
       cb(null, uniqueFilename);
     },

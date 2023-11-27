@@ -4,19 +4,22 @@ export default class Users {
     constructor() {
         console.log(`Working users with Database persistence in mongodb`)
     }
+    //CREAR USUARIO
     save = async (user) => {
         let result = await userModel.create(user);
         return result;
     }
+    //OBTENER TODOS LOS USUARIOS
     getAll= async () => {
         let users = await userModel.find();
         return users.map(user=>user.toObject())
     }
+    //OBTENER USUARIO POR ID
     getById = async(uid) =>{
         let result = await userModel.findById({_id:uid});
         return result;
     };
-
+    //OBTENER EL ID DEL USUARIO POR EMAIL
     getByEmail = async (email) => {
         try {
           const user = await userModel.findOne({ email: email });
@@ -29,7 +32,7 @@ export default class Users {
           throw error; 
         }
       };
-      
+      //CAMBIAR ROL DEL USUARIO
       update = async (uid, newRole) => {
         try {
           const result = await userModel.findByIdAndUpdate(uid, { role: newRole });
@@ -38,14 +41,13 @@ export default class Users {
           throw error;
         }
       };
-
-     upAvatar = async (uid, imagePath) => {
+      //SUBIR FOTO DE PERFIL
+      upAvatar = async (uid, imagePath) => {
         try {
           const user = await userModel.findById(uid);
           if (!user) {
             throw new Error('Usuario no encontrado');
           }
-      
           // Actualiza la ruta de la imagen del usuario en la base de datos
           user.profileImage = imagePath;
           await user.save();
@@ -56,24 +58,34 @@ export default class Users {
         }
       };
 
-      avatar= async (uid) => {
-        let user = await userModel.find(uid);
-        const avatar = user.profileImage;
-        return avatar;
+      //SUBIR DOCUMENTOS
+      upDocument = async (uid, documentType, filePath) =>{
+      try {
+        const user = await userModel.findById(uid);
+            if (!user) {
+              throw new Error('Usuario no encontrado');
+            }
+      // Agregar un nuevo documento al arreglo 'documents'
+      user.documents.push({
+        name: documentType, 
+        reference: filePath, 
+      });
+      console.log("aca toy userdao")
+      await user.save();
+      
+      return { success: true };
+    } catch (error) {
+      throw new Error('Error al subir el documento: ' + error.message);
     }
+  }
+
+
+    //   avatar= async (uid) => {
+    //     let user = await userModel.find(uid);
+    //     const avatar = user.profileImage;
+    //     return avatar;
+    // }
       
 
-      // upAvatar= async (userId, imagePath)=> {
-      //   try {
-      //     let user = await userModel.findById(userId);
-      //     console.log("pathiamge",imagePath)
-      //     user.profileImage = imagePath; // Actualizar la ruta de la imagen
-                
-      //     await userModel.save();
-      //     return { message: 'Imagen de perfil subida exitosamente' };
-      //   } catch (error) {
-      //     throw new Error('Error al subir la imagen de perfil');
-      //   }
-      // }
-      
+           
 }

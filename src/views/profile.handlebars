@@ -2,7 +2,7 @@
     <h6>{{first_name}}</h6>
     <h6>{{email}}</h6>
   
-     {{!-- <img src="/public/upload/profile/"  alt="Avatar" width="150" height="150" class="img-fluid rounded-circle mt-3"> --}}
+     <img src="http://localhost:8080/{{ profileImage}}"   alt="Avatar" width="150" height="150" class="img-fluid rounded-circle mt-3"> 
   
     <h3 class="mt-4">Cargar Avatar</h3>
     <form   action="/api/users/{{_id}}/upload-avatar" method="POST" enctype="multipart/form-data">
@@ -11,23 +11,24 @@
     </form>
   
     <h1 class="mt-5">Subir documentos</h1>
-    <form action="/upload" method="post" enctype="multipart/form-data">
-      <div class="mb-3">
-        <label for="documentType" class="form-label">Seleccione el tipo de documento:</label>
-        <select id="documentType" name="documentType" class="form-select">
-          <option value="identification">Identificación</option>
-          <option value="addressProof">Comprobante de domicilio</option>
-          <option value="bankStatement">Comprobante de estado de cuenta</option>
-        </select>
-      </div>
+    <form action="/api/users/{{_id}}/upload-documents" method="post" enctype="multipart/form-data">
+  <div class="mb-3">
+    <label for="documentType" class="form-label">Seleccione el tipo de documento:</label>
+    <select id="documentType" name="documentType" class="form-select"> 
+      <option value="identification">Identificación</option>
+      <option value="addressProof">Comprobante de domicilio</option>
+      <option value="bankStatement">Comprobante de estado de cuenta</option>
+    </select>
+  </div>
 
-      <div class="mb-3">
-        <label for="file" class="form-label">Seleccione el archivo:</label>
-        <input type="file" name="file" accept=".pdf, .doc, .docx, .jpg, .png" class="form-control">
-      </div>
+  <div class="mb-3">
+    <label for="file" class="form-label">Seleccione el archivo:</label>
+    <input type="file" name="documents" accept=".pdf, .doc, .docx, .jpg, .png" class="form-control">
+  </div>
 
-      <button type="submit" class="btn btn-secondary">Subir Documento</button>
-    </form>
+  <button type="submit" class="btn btn-secondary">Subir Documento</button>
+</form>
+
   </div>
 
    {{!-- <script src="/js/updocuments.js"></script>  --}}

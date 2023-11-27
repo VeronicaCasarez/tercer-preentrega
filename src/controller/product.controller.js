@@ -1,7 +1,7 @@
 import CustomError from "../services/CustomError.js";
 import EErrors from "../services/enum.js";
 import { generateProductErrorInfo } from "../services/info.js";
-import { productService } from "../repositories/services.js";
+import { productService,userService } from "../repositories/services.js";
 import notifier from "node-notifier";
 
 
@@ -33,13 +33,17 @@ const saveProduct = async (req, res) => {
   
   ////OBTENER TODOS LOS PRODUCTOS////*** */
   const getAllProducts = async (req, res) => {
+
     const products = await productService.getAllProducts();
+    const userId= req.user.user.user._id;
+    const profile= await userService.getUserById(userId);
+    const showAvatar =profile.profileImage;
     const user = req.user;
     const cartId = req.user.user.user.cart;
     const userRole = user.user.user.role;
     const showEditButton = userRole === 'admin' || userRole === 'premium' ? true : false;
 
-    res.render('product', { products: products, user: user, cartId: cartId, showEditButton });
+    res.render('product', { products: products,user: user, cartId: cartId, showEditButton,showAvatar});
   };
   
 ////OBTENER UN PRODUCTO////*** */

@@ -1,16 +1,12 @@
 <div> 
     <div class="welcome-message d-flex align-items-center">
-        <p>Bienvenido </p>
+        <img src="http://localhost:8080/{{showAvatar}}"   alt="Avatar" width="50" height="50" class="img-fluid rounded-circle mt-3"> 
+
         {{#if user}}
             <p>Usuario: {{user.user.user.email}}</p>
             <p>Rol: {{user.user.user.role}}</p>
             <p>Id: {{user.user.user._id}}</p>
-
-            <object data="{{user.user.user.profileImage}}" type="image/png/jpg">
-            <!-- Si la imagen no se carga, se muestra este contenido alternativo -->
-               <p>Imagen no disponible</p>
-            </object>
-            
+        
             <button type="button" class="btn btn-secondary cart-button"  id="{{user.user.user.cart}}"> Ir al carrito</button>
             <button type="button" class="btn btn-secondary change-role-button" id="{{user.user.user._id}}" > Cambiar rol</button>
             <a  id="profile-button" class="btn btn-secondary m-2 ml-10 "  href="/api/users/{{user.user.user._id}}/profile">Ir al perfil</a> 

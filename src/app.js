@@ -25,6 +25,7 @@ import nodemailer from 'nodemailer';
 import initializePassport from "./config/passport.config.js";
 import { Server } from "socket.io";
 import { createServer } from "http";
+import path from "path";
 
 import * as dotenv from "dotenv";
 
@@ -45,7 +46,16 @@ const PORT = process.env.PORT || 8080;
 
 //manejo de archivos staticos y json
 app.use(express.static("public"));
-app.use('api/users/upload/profile', express.static('api/users/upload/profile'));
+// // Rutas estáticas para servir los archivos subidos
+// app.use('/public/profiles', express.static(path.join(__dirname, 'public', 'upload', 'profiles')));
+// app.use('/public/products', express.static(path.join(__dirname, 'public', 'upload', 'products')));
+// app.use('/public/documents', express.static(path.join(__dirname, 'public', 'upload', 'documents')));
+
+app.use('/public/upload', express.static(path.join(__dirname, '../public/upload')));
+
+app.use('/public/upload/profiles', express.static(path.join(__dirname, '/public/upload/profiles')));
+
+app.use('/public/upload/profiles', express.static('/public/upload/profiles'));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

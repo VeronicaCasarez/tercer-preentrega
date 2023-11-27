@@ -121,20 +121,14 @@ const goUpDocument =async(req,res)=>{
 const uploadProfileUser = async (req, res) => {
   try {
     const userId = req.params.uid; 
-    const imagePath = req.file.path; // Multer guarda la información del archivo en req.file
-    console.log("userid",userId)
-
-    console.log("ruta",imagePath)
-    const result = await userService.uploadProfileUser(userId, imagePath);
-    console.log("result",result)
-    
+    const imagePath = req.file.path;
+    const result = await userService.uploadProfileUser(userId,imagePath);
+       
     notifier.notify({
       title: 'Hermosa foto',
-      message: 'Tu imagen fue agregada al perfil'
-      
+      message: 'Tu imagen fue agregada al perfil',
     });
-   
-    res.redirect(303, `/api/users/${userId}/profile`);
+       res.redirect(303, `/api/users/${userId}/profile`);
   } catch (error) {
     
     res.status(500).json({ error: 'Error interno del servidor al subir la imagen de perfil' });
@@ -143,41 +137,66 @@ const uploadProfileUser = async (req, res) => {
 };
 
 
-// //SUBIR DOCUMENTOS CON MULTER
-const uploadDocument = async (req, res) => {
+//SUBIR DOCUMENTOS CON MULTER
+const uploadDocumentUser = async (req, res) => {
   try {
     const userId = req.params.uid;
-    const user = await userService.findById(userId);
-
-    if (!user) {
-      return res.status(404).json({ error: "Usuario no encontrado" });
+    const documentType = req.body.documentType; // Obtener el tipo de documento desde el body
+    console.log("aca en document type",documentType)
+  
+    if (!req.file) {
+      return res.status(400).json({ error: 'Por favor, selecciona un archivo.' });
     }
 
-    // Procesar cada archivo y actualizar el modelo del usuario
-    req.files.forEach(file => {
-      const documentType = file.fieldname;
-      // Actualizar el modelo del usuario con la información del documento
-      user.documents.push({
-        name: file.originalname,
-        reference: `link/al/documento/${file.originalname}`
-      });
+    const filePath = req.file.path; // Ruta del archivo subido
+ console.log("aca en folepath",filePath)
+    await userService.uploadDocument(userId, documentType, filePath);
+
+    notifier.notify({
+      title: 'Documento subido',
+      message: 'Tu documento fue subido correctamente',
     });
 
-    // Guardar los cambios en el usuario
-    await userService.uploadDoc(uid,);
-
-    return res.status(200).json({ message: "Documentos subidos exitosamente" });
+    res.redirect(303, `/api/users/${userId}/profile`);
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: "Error interno del servidor" });
+    res.status(500).json({ error: 'Error interno del servidor al subir el archivo.' });
   }
 };
+
+// const uploadDocumentUser = async (req, res) => {
+//   try {
+//     const userId = req.params.uid;
+//     upload.single('file')(req, res, async function (err) {
+//       if (err instanceof multer.MulterError) {
+//         return res.status(400).json({ error: 'Error al subir el archivo.' });
+//       } else if (err) {
+//         return res.status(400).json({ error: err });
+//       }
+
+//       // Aquí tienes el archivo subido accesible en req.file
+//       console.log("aca toy")
+//       // Lógica para guardar el archivo subido en userService.uploadProfileUser
+//       const documentType = req.body.documentType;
+//       const filePath = req.file.path; // Ruta del archivo subido
+
+//       await userService.uploadDocument(userId, documentType, filePath);
+
+//       notifier.notify({
+//         title: 'Documento subido',
+//         message: 'Tu documento fue subido correctamente',
+//       });
+//       console.log("aca toy controller")
+//       res.redirect(303, `/api/users/${userId}/profile`);
+//     });
+//   } catch (error) {
+//     res.status(500).json({ error: 'Error interno del servidor al subir el archivo.' });
+//   }
+// };
 
 //IR AL PERFIL
 const getProfile =async(req,res)=>{
   const userId=req.params.uid;
   const profile= await userService.getUserById(userId);
-  console.log("estoy en el profile",profile)
   res.render('profile',profile)
 };
 
@@ -185,7 +204,6 @@ const getProfile =async(req,res)=>{
 const getAvatar =async(req,res)=>{
   const userId=req.params.uid;
   const showAvatar= await userService.getAvatar(userId);
- 
   res.send(showAvatar)
 }
 
@@ -196,7 +214,7 @@ export {saveUser,
   getUserForChange,
   getUserByEmail,
   goUpDocument,
-  uploadDocument,
+  uploadDocumentUser,
   getProfile,
   uploadProfileUser,
   getAvatar}
