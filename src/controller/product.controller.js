@@ -2,31 +2,28 @@ import CustomError from "../services/CustomError.js";
 import EErrors from "../services/enum.js";
 import { generateProductErrorInfo } from "../services/info.js";
 import { productService,userService } from "../repositories/services.js";
+import { uploadProductImage } from '../config/multer.config.js';
 import notifier from "node-notifier";
 
 
+
 //CREAR PRODUCTO
-const saveProduct = async (req, res) => {
+const createProduct = async (req, res) => {
   try {
     const productData = req.body;
     const user = req.user; 
-
-    if (!productData || !productData.name || !productData.description || !productData.price || !productData.category || !productData.availability) {
+      if (!productData || !productData.name || !productData.description || !productData.price || !productData.category || !productData.availability) {
       throw new CustomError(EErrors.InvalidData, "Los datos del producto son inválidos.");
     }
-     // Establece el campo 'owner' del producto
     productData.owner = user.user.user.email;
 
     await productService.createProduct(productData);
     res.send(productData);
   } catch (error) {
-    if (error instanceof CustomError) {
-      const errorInfo = generateProductErrorInfo(error);
-      res.status(errorInfo.statusCode).json(errorInfo);
-    } else {
+
       console.error("Error no controlado:", error);
       res.status(500).json({ message: "Error interno del servidor." });
-    }
+    
   }
 };
 
@@ -66,19 +63,41 @@ const saveProduct = async (req, res) => {
     const pid = req.params.pid;
     const productById = await productService.getProductById(pid);
     productById._id = productById._id.toString();
-  
-    res.render('update-one-product', { productById });
+    res.render('update-one-product', productById );
   };
   
   ////ACTUALIZA UN PRODUCTO////
   const updateProduct = async (req, res) => {
-    const { pid } = req.params;
+    const  pid  = req.params.pid;
+    console.log("en el controler",pid)
     const productToUpdated = req.body;
     const productUpdated = await productService.updateProduct(pid, productToUpdated);
     console.log(productToUpdated);
+    notifier.notify({
+      title: 'Exito',
+      message: 'Producto actualizado',
+    });
     res.send(productUpdated);
   };
   
+  //GUARDAR LA IMAGEN DE UN PRODUCTO
+const uploadImageProduct = async (req, res) => {
+  try {
+    const productId = req.params.pid; 
+    const imagePath = req.file.path;
+    await productService.uploadImageProduct(productId,imagePath);
+       
+    notifier.notify({
+      title: 'Imagen del producto',
+      message: 'Tu imagen fue agregada al prodcuto',
+    });
+       res.redirect(303, `/api/updateproducts`);
+  } catch (error) {
+    
+    res.status(500).json({ error: 'Error interno del servidor al subir la imagen de producto' });
+  }
+   
+};
   ////ELIMINA UN PRODUCTO////**** */
   const deleteProduct = async (req, res) => {
     const { pid } = req.params;
@@ -89,6 +108,10 @@ const saveProduct = async (req, res) => {
   
       if (user.user.user.role === 'admin' || (user.user.user.role === 'premium' && product.owner === user.user.user.email)) {
         const productDeleted = await productService.deleteProduct(pid);
+        notifier.notify({
+          title: 'Exito',
+          message:'Producto eliminado.'
+      })
         res.send(productDeleted);
       } else {
          notifier.notify({
@@ -104,4 +127,4 @@ const saveProduct = async (req, res) => {
   
   
  
-export {saveProduct,getAllProducts,getProductById, deleteProduct,updateProduct,getAllProductsForAdmin,getProductByIdForAdmin}
+export {createProduct,getAllProducts,getProductById, deleteProduct,updateProduct,getAllProductsForAdmin,getProductByIdForAdmin,uploadImageProduct}

@@ -1,4 +1,5 @@
- <div class="row">
+<div class="container mt-5">
+    <div class="row">
         <div class="col">
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <div class="container-fluid">
@@ -18,7 +19,7 @@
 <h3>Crear Nuevo Producto</h3>
 
     <!-- Formulario para crear un nuevo producto -->
-    <form id="createProductForm" action="/uploadProductImage" method="POST" enctype="multipart/form-data">
+    <form id="createProductForm" action="/api/updateproducts" method="post" enctype="multipart/form-data ">
   <label for="name">Nombre:</label>
   <input type="text" id="name" name="name" required><br>
 
@@ -34,9 +35,8 @@
   <label for="availability">Disponibilidad:</label>
   <input type="number" id="availability" name="availability" required><br>
 
-  <!-- carga de la imagen -->
-  <label for="productImage">Imagen del producto:</label>
-  <input type="file" id="productImage" name="productImage" accept=".jpg, .jpeg, .png" required><br>
+  {{!-- <label for="productImage">Imagen:</label>
+  <input type="file" id="productImage" name="products" accept=".jpg, .jpeg, .png" required class="form-control mt-2"> --}}
 
   <button type="submit" id="createProductButton" data-user-id="{{user.user.user._id}}">Crear Producto</button>
 </form>
@@ -55,6 +55,8 @@
                 <strong>Categoría:</strong> {{this.category}}<br>
                 <strong>Disponibilidad:</strong> {{this.availability}}<br>
                 <strong>Owner:</strong> {{this.owner}}<br>
+                <img class="mb-5" width="90" height="90"  src="http://localhost:8080/{{this.productImage}}"  alt="" ><br>
+                
 
                 <!-- Botón para actualizar el producto -->
                 <button class="button-to-update-product" id="{{this._id}}"  >Actualizar</button> 
@@ -64,6 +66,7 @@
             </li>
         {{/each}}
     </ul>
+</div>
 </div>
 </div>
     <script src="/js/update-products.js"></script>

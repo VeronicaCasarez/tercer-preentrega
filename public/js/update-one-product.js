@@ -1,23 +1,24 @@
-//logica para el boton actualizar producto
+//LOGICA PARA EL BOTON ACTUALIZAR UN PRODUCTO
 const updateProductForm = document.getElementById('updateProductForm');
- // Obtener el ID del producto de la ruta
-
 
 updateProductForm.addEventListener('submit', async (event) => {
   event.preventDefault();
 
-   // Obtener la URL actual
+ // Obtener el ID del producto de la ruta
+ //const pid = event.target.id;
 
 
 // Divide la URL usando "/" como separador
-const pid = window.location.pathname.split('/').pop();
-console.log(pid)
+ const pid = window.location.pathname.split('/').pop();
+
 
   const name = document.getElementById('name').value;
   const description = document.getElementById('description').value;
   const price = parseFloat(document.getElementById('price').value);
   const category = document.getElementById('category').value;
   const availability = parseInt(document.getElementById('availability').value);
+  //const productImage = parseInt(document.getElementById('productImage').value);
+  //const owner = parseInt(document.getElementById('owner').value);
 
   const updateProducto = {
     name,
@@ -25,10 +26,11 @@ console.log(pid)
     price,
     category,
     availability,
-    owner
+    //productImage,
+    //owner
   };
 
-  // Realiza una solicitud POST al servidor para crear el producto
+  // Realiza una solicitud PUT al servidor para actualizar el producto
   try {
     const response = await fetch(`/api/updateproducts/${pid}`,  {
       method: 'PUT',
@@ -40,7 +42,7 @@ console.log(pid)
 
     if (response.ok) {
         console.log('Producto actualizado con éxito',updateProducto);
-        window.location.href = "/api/updateproducts/"; 
+        window.location.href = "/api/updateproducts"; 
        } else {
         console.error('Error al actualizar el producto:', response.statusText);
     }

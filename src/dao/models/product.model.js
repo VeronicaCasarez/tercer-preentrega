@@ -9,14 +9,7 @@ const productSchema = new mongoose.Schema({
   price: { type: Number, required: true },
   category: { type: String, required: true },
   availability: { type: Number, required: true },
-  productImage: String,
-  // owner: { type: String, default: 'admin', validate: {
-  //   validator: function(email) {
-
-  //     return user && user.role === 'premium' && email === user.email;
-  //   },
-  //   message: 'Este campo solo puede ser establecido por usuarios premium con su propio correo electrónico.'
-  // }},
+  productImage: { type: String},
   owner: { type: String, default: 'admin'}
 });
 productSchema.plugin(mongoosePaginate);

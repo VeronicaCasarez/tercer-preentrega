@@ -1,4 +1,4 @@
-//logica para crear producto
+//LOGICA PARA CREAR UN PRODUCTO
 const createProductForm = document.getElementById("createProductForm");
 
 createProductForm &&
@@ -10,16 +10,19 @@ createProductForm &&
     const price = parseFloat(document.getElementById("price").value);
     const category = document.getElementById("category").value;
     const availability = parseInt(document.getElementById("availability").value);
+    //const productImage= document.getElementById("productImage").value;
 
     // Obtiene el ID del usuario desde el botón
     const ownerId = document.getElementById("createProductButton").getAttribute("data-user-id");
- console.log(ownerId)
+      
+    //const image=`public/upload/${productImage}
     const nuevoProducto = {
       name,
       description,
       price,
       category,
       availability,
+      //productImage,
       owner: ownerId, // Establece el ID del usuario como el valor de 'owner'
     };
 
@@ -45,7 +48,7 @@ createProductForm &&
     }
   });
 
-//logica para eliminar un producto
+//LOGICA PARA ELIMINAR UN PRODUCTO*****
 document.querySelectorAll(".button-delete-product").forEach((button) => {
   button.addEventListener("click", async (event) => {
     const productId = event.target.id;
@@ -74,7 +77,7 @@ document.querySelectorAll(".button-delete-product").forEach((button) => {
   });
 });
 
-//logica para ir a actualizar un producto
+//LOGICA PARA IR A ACTUALIZAR UN PRODUCTO****
 document.querySelectorAll(".button-to-update-product").forEach((button) => {
   button.addEventListener("click", moveToUpdateProduct);
 });

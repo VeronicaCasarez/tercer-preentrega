@@ -131,7 +131,7 @@ const uploadProfileUser = async (req, res) => {
   try {
     const userId = req.params.uid; 
     const imagePath = req.file.path;
-    const result = await userService.uploadProfileUser(userId,imagePath);
+    await userService.uploadProfileUser(userId,imagePath);
        
     notifier.notify({
       title: 'Hermosa foto',

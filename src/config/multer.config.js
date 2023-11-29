@@ -22,11 +22,18 @@ function storage(folderName) {
       }
     },
     filename: function (req, file, cb) {
-      const userId = req.params.uid; 
-      const documentType = req.body.documentType; 
+      let uniqueFilename;
+      const userId = req.params.uid ; 
+      const documentType = req.body.documentType ;
 
-      const uniqueFilename = `${userId}_${documentType}_${file.originalname}`;
+      if (folderName === 'products') {
       
+
+        uniqueFilename = `${userId}_${file.originalname}`;
+      } else {
+        // Para profiles y documents, mantenemos la lógica actual
+        uniqueFilename = `${userId}_${documentType}_${file.originalname}`;
+      }
 
       cb(null, uniqueFilename);
     },
