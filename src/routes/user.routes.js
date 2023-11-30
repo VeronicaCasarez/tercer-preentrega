@@ -11,7 +11,7 @@ import { saveUser,
     getProfile,
     uploadProfileUser,
     deleteUser,
-    getAvatar} from "../controller/user.controller.js";
+    } from "../controller/user.controller.js";
 import { passportCall } from "../utils.js";
 import { isUser,isAdmin } from "./middlewares.routes.js";
 import { uploadProfileImage,uploadDocument } from "../config/multer.config.js";

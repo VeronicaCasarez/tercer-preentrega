@@ -1,19 +1,19 @@
-function renderPagination(data) {
-    const paginationDiv = document.getElementById('pagination');
-    paginationDiv.innerHTML = '';
-    if (data.hasPrevPage) {
-      const prevLink = document.createElement('a');
-      prevLink.href = data.prevLink;
-      prevLink.textContent = 'Previous Page';
-      paginationDiv.appendChild(prevLink);
-    }
-    if (data.hasNextPage) {
-      const nextLink = document.createElement('a');
-      nextLink.href = data.nextLink;
-      nextLink.textContent = 'Next Page';
-      paginationDiv.appendChild(nextLink);
-    }
-  }
+// function renderPagination(data) {
+//     const paginationDiv = document.getElementById('pagination');
+//     paginationDiv.innerHTML = '';
+//     if (data.hasPrevPage) {
+//       const prevLink = document.createElement('a');
+//       prevLink.href = data.prevLink;
+//       prevLink.textContent = 'Previous Page';
+//       paginationDiv.appendChild(prevLink);
+//     }
+//     if (data.hasNextPage) {
+//       const nextLink = document.createElement('a');
+//       nextLink.href = data.nextLink;
+//       nextLink.textContent = 'Next Page';
+//       paginationDiv.appendChild(nextLink);
+//     }
+//   }
 
      // Lógica para agregar un producto al carrito
   document.querySelectorAll('.button-add-to-cart').forEach(button => {

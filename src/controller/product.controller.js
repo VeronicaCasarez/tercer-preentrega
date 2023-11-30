@@ -4,6 +4,7 @@ import { generateProductErrorInfo } from "../services/info.js";
 import { productService,userService } from "../repositories/services.js";
 import { uploadProductImage } from '../config/multer.config.js';
 import notifier from "node-notifier";
+import { sendEmailToPremium } from "../services/mailing.js";
 
 
 
@@ -30,7 +31,6 @@ const createProduct = async (req, res) => {
   
   ////OBTENER TODOS LOS PRODUCTOS////*** */
   const getAllProducts = async (req, res) => {
-
     const products = await productService.getAllProducts();
     const userId= req.user.user.user._id;
     const profile= await userService.getUserById(userId);
@@ -69,10 +69,8 @@ const createProduct = async (req, res) => {
   ////ACTUALIZA UN PRODUCTO////
   const updateProduct = async (req, res) => {
     const  pid  = req.params.pid;
-    console.log("en el controler",pid)
     const productToUpdated = req.body;
     const productUpdated = await productService.updateProduct(pid, productToUpdated);
-    console.log(productToUpdated);
     notifier.notify({
       title: 'Exito',
       message: 'Producto actualizado',
@@ -98,25 +96,32 @@ const uploadImageProduct = async (req, res) => {
   }
    
 };
+
   ////ELIMINA UN PRODUCTO////**** */
   const deleteProduct = async (req, res) => {
     const { pid } = req.params;
     const { user } = req;
-  
     try {
       const product = await productService.getProductById(pid);
   
       if (user.user.user.role === 'admin' || (user.user.user.role === 'premium' && product.owner === user.user.user.email)) {
         const productDeleted = await productService.deleteProduct(pid);
+
+        if (user.user.user.role === 'admin' && product.owner !== user.user.user.email) {
+          await sendEmailToPremium(product.owner); 
+          console.log(`Correo enviado a ${product.owner} sobre la eliminación del producto.`);
+        }
+  
         notifier.notify({
           title: 'Exito',
-          message:'Producto eliminado.'
-      })
+          message: 'Producto eliminado.'
+        });
+  
         res.send(productDeleted);
       } else {
-         notifier.notify({
+        notifier.notify({
           title: 'Permiso denegado',
-          message:'No tienes permiso para eliminar este producto.'
+          message: 'No tienes permiso para eliminar este producto.'
         });
       }
     } catch (error) {
@@ -124,6 +129,7 @@ const uploadImageProduct = async (req, res) => {
       res.status(500).send('Error interno del servidor.');
     }
   };
+  
   
   
  

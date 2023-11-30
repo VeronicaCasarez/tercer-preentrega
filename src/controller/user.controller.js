@@ -1,4 +1,3 @@
-//import { USERDAO } from "../dao/index.js";
 import { userService } from "../repositories/services.js";
 import multer from 'multer';
 import notifier from 'node-notifier';
@@ -6,7 +5,7 @@ import { createUserDTO } from "../DTO/userDTO.js";
 
 
 // Configuración de Multer para la subida de imágenes de perfil
-const profileImageUpload = multer({ dest: 'public/upload/profiles/' });
+//const profileImageUpload = multer({ dest: 'public/upload/profiles/' });
 
 //GUARDAR UN USUARIO////****** */
 const saveUser = async (req, res) => {
@@ -17,8 +16,7 @@ const saveUser = async (req, res) => {
         status: "error",
         error: "Incomplete values",
       });
-    }
-  
+    }  
     try {
       // Crear un nuevo usuario utilizando el modelo User y el esquema de usuario
       const newUser = new User({
@@ -28,8 +26,7 @@ const saveUser = async (req, res) => {
         age,
         password,
        
-      });
-  
+      });  
       // Asociar un carrito vacío al nuevo usuario
       const newCart = new Cart();
       await newCart.save();
@@ -37,7 +34,6 @@ const saveUser = async (req, res) => {
   
       // Establecer el rol predeterminado como 'user'
       newUser.role = 'user';
-
       const createdUser = await userService.createUser(newUser);
   
       res.status(201).json({
@@ -80,7 +76,6 @@ const getUserForChange = async(req,res)=>{
   const uid=req.params.uid;
   const userId = await userService.getUserById(uid);
   const users = await userService.getAllUsers(); 
-  console.log("aca tratabdo de renderizar ",users)
   res.render ('edit-users',{userId:userId,users:users})
 };
 
@@ -150,11 +145,10 @@ const uploadProfileUser = async (req, res) => {
 const uploadDocumentUser = async (req, res) => {
   try {
     const userId = req.params.uid;
-    const documentType = req.body.documentType; // Obtener el tipo de documento desde el body
+    const documentType = req.body.documentType; 
     if (!req.file) {
       return res.status(400).json({ error: 'Por favor, selecciona un archivo.' });
     }
-
     const filePath = req.file.path;
     await userService.uploadDocument(userId, documentType, filePath);
 
@@ -177,11 +171,11 @@ const getProfile =async(req,res)=>{
 };
 
 //OBTENER EL AVATAR
-const getAvatar =async(req,res)=>{
-  const userId=req.params.uid;
-  const showAvatar= await userService.getAvatar(userId);
-  res.send(showAvatar)
-};
+// const getAvatar =async(req,res)=>{
+//   const userId=req.params.uid;
+//   const showAvatar= await userService.getAvatar(userId);
+//   res.send(showAvatar)
+// };
 
 //ELIMINAR USUARIO
 const deleteUser =async(req,res)=>{
@@ -204,4 +198,4 @@ export {saveUser,
   uploadDocumentUser,
   getProfile,
   uploadProfileUser,
-  getAvatar,deleteUser}
+  deleteUser}

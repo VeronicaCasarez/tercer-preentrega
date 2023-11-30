@@ -4,14 +4,15 @@
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <div class="container-fluid">
                     <a class="navbar-brand" href="/api/products">Ir a home</a>
+                    <a class="navbar-brand" href="/api/products">Atras</a>
                 </div>
             </nav>
         </div>
     </div>
   <div class="card">
     <div class="card-body">
-      <h1 class="card-title">{{_id}}</h1>
       <h1 class="card-title">{{name}}</h1>
+      <img src="http://localhost:8080/{{productImage}}">
       <p class="card-text">{{description}}</p>
       <p class="card-text">Categoría: {{category}}</p>
       <p class="card-text">Disponibilidad: {{availability}}</p>

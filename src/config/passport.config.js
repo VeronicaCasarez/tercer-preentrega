@@ -26,7 +26,6 @@ export const cookieExtractor = (req) => {
 };
 
 const initializePassport = () => {
-
    passport.use(
       "jwt",
       new JWTStrategy(
@@ -37,7 +36,6 @@ const initializePassport = () => {
         async (jwt_payload, done) => {
           try {
             //validar que el usuario exista en la base de datos
-            console.log("jwt_payload", jwt_payload);
             let response = await UserModel.find({
               email: jwt_payload.user.username,
             });
@@ -114,7 +112,6 @@ const initializePassport = () => {
 
             };
            
-            console.log("nuevo usuario", newUser);
             let result = await UserModel.create(newUser);
             return done(null, result);
           } catch (error) {

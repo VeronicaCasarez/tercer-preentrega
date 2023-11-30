@@ -70,7 +70,6 @@ export default class Users {
         name: documentType, 
         reference: filePath, 
       });
-      console.log("aca toy userdao")
       await user.save();
       
       return { success: true };

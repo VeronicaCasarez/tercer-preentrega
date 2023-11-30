@@ -35,6 +35,7 @@ import LoggerRouter from "./routes/loggertest.routes.js"
 
 import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUiExpress from "swagger-ui-express";
+import { deleteInactiveUsers } from '../src/services/mailing.js'
 
 dotenv.config();
 const app = express();
@@ -68,7 +69,10 @@ app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");
 handlebars.compileOptions = { allowProtoMethodsByDefault: true };
 
-
+// Iniciar la lógica para eliminar usuarios inactivos y enviar correos
+deleteInactiveUsers().catch((error) => {
+  console.error('Error al eliminar usuarios inactivos:', error);
+});
 
 //manejo de sesion storage
 app.use(
