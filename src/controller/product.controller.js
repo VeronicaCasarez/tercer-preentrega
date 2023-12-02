@@ -5,6 +5,9 @@ import { productService,userService } from "../repositories/services.js";
 import { uploadProductImage } from '../config/multer.config.js';
 import notifier from "node-notifier";
 import { sendEmailToPremium } from "../services/mailing.js";
+import products from "../dao/models/product.model.js";
+import mongoose from "mongoose";
+import productsModel from "../dao/models/product.model.js";
 
 
 
@@ -31,7 +34,7 @@ const createProduct = async (req, res) => {
   
   ////OBTENER TODOS LOS PRODUCTOS////*** */
   const getAllProducts = async (req, res) => {
-    const products = await productService.getAllProducts();
+    //const products = await productService.getAllProducts();
     const userId= req.user.user.user._id;
     const profile= await userService.getUserById(userId);
     const showAvatar =profile.profileImage;
@@ -40,7 +43,30 @@ const createProduct = async (req, res) => {
     const userRole = user.user.user.role;
     const showEditProduct = userRole === 'admin' || userRole === 'premium' ? true : false;
     const showChangeRole = userRole === 'admin'  ? true : false;
-    res.render('home', { products: products,user: user, cartId: cartId, showEditProduct,showAvatar,showChangeRole});
+    const page = parseInt(req.query.page) || 1; // Página actual, por defecto la primera
+    const perPage = 6; // Número de productos por página
+    const totalProducts = await productsModel.countDocuments();
+    const totalPages = Math.ceil(totalProducts / perPage);
+
+    
+    const products = await productsModel.find()
+      .skip((page - 1) * perPage)
+      .limit(perPage)
+      .exec();
+
+    res.render('home', {
+      products:products,
+      user: user, cartId: cartId, showEditProduct,showAvatar,showChangeRole,
+      pagination: {
+        currentPage: page,
+        totalPages,
+        hasPrevPage: page > 1,
+        hasNextPage: page < totalPages,
+        prevLink: page > 1 ? `/productos?page=${page - 1}` : null,
+        nextLink: page < totalPages ? `/productos?page=${page + 1}` : null
+      }
+    });
+   
   };
   
 ////OBTENER UN PRODUCTO////*** */

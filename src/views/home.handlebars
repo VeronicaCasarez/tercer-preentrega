@@ -43,8 +43,21 @@
     {{/each}}
   </div>
 
+<div id="paginated">
+  <p>Page {{ pagination.currentPage }} of {{ pagination.totalPages }}</p>
+
+  {{#if pagination.hasPrevPage}}
+    <a href="{{ pagination.prevLink }}">Anterior</a>
+  {{/if}}
+
+  {{#if pagination.hasNextPage}}
+    <a href="{{ pagination.nextLink }}">Siguiente</a>
+  {{/if}}
 
 
+</div>
+
+{{!-- 
   <div id="paginated">
     <p>Page {{ pagination.currentPage }} of {{ pagination.totalPages }}</p>
   
@@ -55,15 +68,15 @@
        {{#if pagination.hasNextPage}}
         <a href="{{ pagination.nextLink }}">Siguiente</a>
       {{/if}}
-  </div>
+  </div> --}}
 
 </div>
  
  <script src="/js/product.js"></script>
  <script src="/js/logout.js"></script>
-  <script src="/js/cart.js"></script>
-   <script src="/js/update-products.js"></script>
-   <script src="/js/edit-user.js"></script>
+ <script src="/js/cart.js"></script>
+ <script src="/js/update-products.js"></script>
+ <script src="/js/edit-user.js"></script>
   
 
 
